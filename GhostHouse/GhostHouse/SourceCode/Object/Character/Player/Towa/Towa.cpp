@@ -133,6 +133,7 @@ void CTowa::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	}
 
 	if (m_isGoal == true) {
+		m_pCamera->SetCameraPos( stCamera.Pos );
 		LookCameraPos();
 	}
 	m_pSkinMesh->SetPosition(m_vPosition);

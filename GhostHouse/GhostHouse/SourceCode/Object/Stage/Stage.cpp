@@ -197,6 +197,7 @@ bool CStage::LoadMap()
 			m_bOneCall = false;
 		}
 		m_pMap = m_pMapList[init_Map];
+		m_NowMapScene = static_cast<MapScene>(init_Map);
 		m_isStopCamera = true;
 		m_isLightSet = true;
 
