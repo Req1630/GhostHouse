@@ -102,6 +102,7 @@ CMapLoad::CMapLoad()
 		{ "Goal",					InitFunc<CGoal> },
 		{ "TextEvent",				InitFunc<CTextEvent> },
 		{ "InvisibleWall",			InitFunc<CInvisibleWall> },
+		{ "InvisibleBox",			InitFunc<CInvisibleWall> },
 	};
 	objList.swap( CreateObjList );
 }

@@ -204,6 +204,7 @@ bool CStage::LoadMap()
 		m_NowMapScene = static_cast<MapScene>(init_Map);
 		m_isStopCamera = true;
 		m_isLightSet = true;
+		m_pPlayerManager->SetStageNumber( init_Map );
 		if (m_bStartGame == true) {
 			m_TextNum = m_OldTextNum[init_Map];
 		}

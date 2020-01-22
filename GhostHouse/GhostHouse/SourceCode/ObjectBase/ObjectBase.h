@@ -43,6 +43,7 @@ enum class enObjectNo
 	Goal,
 	TextEvent,
 	InvisibleWall,
+	InvisibleBox,
 	// プレイヤー.
 	Sayaka,			// サヤカ.
 	Towa,			// トワ.
@@ -127,6 +128,7 @@ const unordered_map<string, enObjectNo> ObjectList
 	{ "Goal",					enObjectNo::Goal },
 	{ "TextEvent",				enObjectNo::TextEvent },
 	{ "InvisibleWall",			enObjectNo::InvisibleWall },
+	{ "InvisibleBox",			enObjectNo::InvisibleBox },
 	{ "OpenDoor",				enObjectNo::OpenDoor },
 };
 
