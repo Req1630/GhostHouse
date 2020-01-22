@@ -26,7 +26,7 @@
 class CCamera
 {
 private:
-	const int TEST = 1;
+	const int TEST = 2;
 	const float CAMERA_ROTATION_SPEED = 2.3f;
 	const float MOVE_SPEED = 0.3f;
 	const float CAMERA_UP_DISTANCE = 16.0f;
