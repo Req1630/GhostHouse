@@ -1,5 +1,6 @@
 #include "PlayerManager.h"
 #include "..\..\XInput\XInput.h"
+#include "..\..\Object\Stage\Stage.h"
 
 CPlayerManager::CPlayerManager()
 	: m_pSayaka				( nullptr )
@@ -9,6 +10,8 @@ CPlayerManager::CPlayerManager()
 	, m_isSetOnGround		( false )
 	, m_isLifePointRender	( false )
 	, m_LifeImageScale		( 1.0f ) 
+	, m_StageNumber			( 0 )
+	, m_isInitTowaState		( false )
 {}
 
 CPlayerManager::~CPlayerManager()
@@ -31,8 +34,13 @@ void CPlayerManager::Update()
 	m_isLifePointRender = true;			// UIのレンダリングをさせる.
 
 	if( m_pTowa != nullptr ){
+		if( m_StageNumber >= static_cast<int>(CStage::MapScene::In_the_house_B1_Area2) && m_isInitTowaState == false ){
+			m_pTowa->BitFlagON( BitFlag::isTowaAfterHelping );
+			m_isInitTowaState = true;
+		}
 		m_pSayaka->Update( m_pTowa );	// プレイヤーの更新.
 		m_pTowa->Update( m_pSayaka );
+
 
 		if( m_pSayaka->GetBitFlag( BitFlag::isInvincible ) == false ){
 			m_LifeImageScale = 1.0f;
@@ -44,6 +52,7 @@ void CPlayerManager::Update()
 			m_LifeImageScale = 1.0f;
 		}
 	}
+
 }
 
 void CPlayerManager::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera )

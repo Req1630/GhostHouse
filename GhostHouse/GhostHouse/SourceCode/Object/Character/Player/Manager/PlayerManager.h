@@ -45,6 +45,8 @@ public:
 	std::shared_ptr<CObjectBase> GetSayaka(){ return m_pSayaka; }
 	std::shared_ptr<CObjectBase> GetTowa(){ return m_pTowa; }
 
+	void SetStageNumber( const int& number ){ m_StageNumber = number;  }
+
 private:
 	void UILoad();
 
@@ -59,6 +61,8 @@ private:
 	bool m_isSetOnGround;
 	bool m_isLifePointRender;
 	float m_LifeImageScale;
+	int m_StageNumber;
+	bool m_isInitTowaState;
 };
 
 #endif	// #ifndef PLAYER_MANAGER_H.

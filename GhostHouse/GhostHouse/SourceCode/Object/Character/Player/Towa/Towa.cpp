@@ -274,21 +274,21 @@ void CTowa::ChangeStateButton(shared_ptr<CObjectBase> pObj)
 	if (m_TowaState != enTowaState::enBeforehelp) {
 		pObj->BitFlagON(BitFlag::isTowaAfterHelping);
 	}
+	if( GetBitFlag(BitFlag::isTowaAfterHelping) == true ){
+		m_TowaState = enTowaState::enFollowSayaka;
+		BitFlagOFF( BitFlag::isTowaAfterHelping );
+	}
 
-	if (CXInput::IsPress(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+	if (CXInput::IsPress(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
 		if (m_TowaState == enTowaState::enCanMoveAlone) return;
-		//if( fDistance < 1.0f ){
 		if (m_TowaState != enTowaState::enBeforehelp) {
 			ChangeSayakaMoveState(pObj);
 		}
-		//}
 	}
-	if (CXInput::IsPress(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
-		//if( fDistance < 1.0f ){
+	if (CXInput::IsPress(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 		if (m_TowaState != enTowaState::enBeforehelp) {
 			ChangeTowaMoveState(pObj);
 		}
-		//}
 	}
 	//if (GetBitFlag(BitFlag::isMovement) == false) {
 	//	if (CXInput::IsPress(XINPUT_GAMEPAD_LEFT_SHOULDER)) {

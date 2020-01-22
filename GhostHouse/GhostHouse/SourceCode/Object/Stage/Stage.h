@@ -10,6 +10,7 @@
 
 class CStage
 {
+public:
 	enum class MapScene
 	{
 		None = -1,

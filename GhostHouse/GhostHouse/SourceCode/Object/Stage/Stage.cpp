@@ -236,6 +236,7 @@ void CStage::PlayerInit( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext1
 		}
 		if( obj->GetObjectNo() == enObjectNo::Towa ){
 			m_pPlayerManager->SetTowa( m );
+			m_pPlayerManager->SetStageNumber( static_cast<int>(m_NowMapScene) );
 			m_pMap.erase( m_pMap.begin()+index );
 			return;
 		}
