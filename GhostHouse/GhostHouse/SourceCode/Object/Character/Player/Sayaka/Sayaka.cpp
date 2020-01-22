@@ -152,8 +152,8 @@ void CSayaka::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	}
 
 	//ライトをサヤカに合わせて回転.
-	if( m_isGamePause == false ||
-		m_LifePoint > 0 ){
+	if( GetBitFlag( BitFlag::isStopCamera ) == false && m_LifePoint > 0
+		&& CFadeUI::isActive() == false && m_isUpdate == true && m_isGamePause == false ){
 		SetLightMatrix( Light );
 	}
 	m_ViewMat = mView;
