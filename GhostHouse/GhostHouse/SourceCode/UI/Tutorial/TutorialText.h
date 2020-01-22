@@ -14,16 +14,16 @@ public:
 	// XVŠÖ”.
 	void Update();
 	// •`‰æŠÖ”.
-	void Render( int ArrayNumber, shared_ptr<CObjectBase> pObj );
+	void Render(int ArrayNumber, shared_ptr<CObjectBase> pObj);
 
-	void CharRender( float UV_X, float UV_Y );
+	void CharRender(float UV_X, float UV_Y);
 
-	void SetFontPosition( float PositionX, float PositionY, float PositionZ );
+	void SetFontPosition(float PositionX, float PositionY, float PositionZ);
 	bool LoadAllImage();
 
-	void TextDraw( int ArrayNumber, shared_ptr<CObjectBase> pObj );
+	void TextDraw(int ArrayNumber, shared_ptr<CObjectBase> pObj);
 
-	static void SetArrayNumber( int arrayNumber )
+	static void SetArrayNumber(int arrayNumber)
 	{
 		m_sArrayNumber = arrayNumber;
 	}

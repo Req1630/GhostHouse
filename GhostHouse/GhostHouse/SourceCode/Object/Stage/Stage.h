@@ -10,7 +10,6 @@
 
 class CStage
 {
-public:
 	enum class MapScene
 	{
 		None = -1,
@@ -32,11 +31,11 @@ public:
 	~CStage();
 
 	// 読み込み関数.
-	void Load( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 );
+	void Load(ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11);
 	// 更新関数.
 	void Updata();
 	// 描画関数.
-	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera );
+	void Render(D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera);
 
 	// コンテニューの際ステージのリセット.
 	void ContinueStageReset();
@@ -51,53 +50,53 @@ public:
 	bool isSayakaLifePointZero();
 
 	// ポーズしているかどうか設定.
-	void SetPause( const bool& isPause ){ m_isPause = isPause; }
+	void SetPause(const bool& isPause) { m_isPause = isPause; }
 
 	D3DXVECTOR3 GetPlayerPosition()
 	{
-		if( m_pPlayerManager->GetSayaka() == nullptr ) return { 0.0f, 0.0f, 0.0f };
+		if (m_pPlayerManager->GetSayaka() == nullptr) return { 0.0f, 0.0f, 0.0f };
 		return m_pPlayerManager->GetSayaka()->GetPosition();
 	}
 
 	void SetCameraOFF()
 	{
-		if( m_pPlayerManager->GetSayaka() == nullptr ) return;
-		m_pPlayerManager->GetSayaka()->BitFlagOFF( BitFlag::isStopCamera );
+		if (m_pPlayerManager->GetSayaka() == nullptr) return;
+		m_pPlayerManager->GetSayaka()->BitFlagOFF(BitFlag::isStopCamera);
 	}
 private:
 	// マップの読み込み.
 	bool LoadMap();
 	// マップオブジェクトの読み込み.
-	void LoadMapObject( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 );
+	void LoadMapObject(ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11);
 	// プレイヤーの作成.
-	void PlayerInit( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 );
+	void PlayerInit(ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11);
 	// 次のマップに変更.
 	void ChangeNextMap();
 
 	// タイトル時のライト座標の初期化.
-	void InitLightPosition( Light& stLight );
+	void InitLightPosition(Light& stLight);
 
 	// 背景の描画.
-	void BackGroundRender( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera );
+	void BackGroundRender(D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera);
 
 	// テキストを次に進める当たり判定の個数,位置を特定.
 	void GetNextTextColPosition();
 	// テキストを表示.
-	void DispText( shared_ptr<CObjectBase> pObj );
+	void DispText(shared_ptr<CObjectBase> pObj);
 	// テキストを次の文に変更.
 	void ChangeText();
 
 	// 三次元座標の二点間距離を測る.
-	float GetTwoDistanceXYZ( const D3DXVECTOR3 & vMyPos, const D3DXVECTOR3 & vtargetPos );
+	float GetTwoDistanceXYZ(const D3DXVECTOR3 & vMyPos, const D3DXVECTOR3 & vtargetPos);
 
 
 	void InitTextNum(int Num);
 private:
 	int init_Map;
+	int m_MapSize;
 	bool m_isLightSet;
 	bool m_bOneSound;
 	bool m_bOneCall;
-	vector<bool> m_bOneCallInit;
 	bool m_bStartGame;
 	bool m_isPause;
 	bool m_isRender;
