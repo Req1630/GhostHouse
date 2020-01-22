@@ -191,7 +191,8 @@ void CSayaka::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj,
 //リリースビルドはD3DX_PIを消す.
 #ifdef _DEBUG
 	// スティックの遊びを超えたら入力検知.
-	if( GetBitFlag( BitFlag::isStopCamera ) == false && m_LifePoint > 0 && CFadeUI::isActive() == false ){
+	if( GetBitFlag( BitFlag::isStopCamera ) == false && m_LifePoint > 0 
+		&& CFadeUI::isActive() == false && m_isUpdate == true && m_isGamePause == false ){
 		if( CXInput::GetLThumbX() > INPUT_THUMB_MAX || CXInput::GetLThumbX() < INPUT_THUMB_MIN ||
 			CXInput::GetLThumbY() > INPUT_THUMB_MAX || CXInput::GetLThumbY() < INPUT_THUMB_MIN ){
 			if( GetBitFlag( BitFlag::isCameraMoveUp ) == true ){
@@ -204,7 +205,8 @@ void CSayaka::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj,
 		}
 	}
 #else
-	if( GetBitFlag( BitFlag::isStopCamera ) == false && m_LifePoint > 0 && CFadeUI::isActive() == false ){
+	if( GetBitFlag( BitFlag::isStopCamera ) == false && m_LifePoint > 0 
+		&& CFadeUI::isActive() == false && m_isUpdate == true && m_isGamePause == false ){
 		if( CXInput::GetLThumbX() > INPUT_THUMB_MAX || CXInput::GetLThumbX() < INPUT_THUMB_MIN ||
 			CXInput::GetLThumbY() > INPUT_THUMB_MAX || CXInput::GetLThumbY() < INPUT_THUMB_MIN ){
 			if( GetBitFlag( BitFlag::isCameraMoveUp ) == true ){

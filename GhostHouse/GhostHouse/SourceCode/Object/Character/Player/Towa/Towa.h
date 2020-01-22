@@ -37,7 +37,7 @@ class CTowa : public CPlayerBase
 	const char*	MAIN_MODEL_NAME = "Towa_s";	// 仕様モデル名.
 private:
 	//追尾速度.
-	const float FOLLOW_SPEED = 0.16f;
+	const float FOLLOW_SPEED = 0.165f;
 	//移動速度を割る値.
 	const float SLOW_DOWN_VALUE = 10.0f;
 	const float MODEL_SCALE		= 0.04f;

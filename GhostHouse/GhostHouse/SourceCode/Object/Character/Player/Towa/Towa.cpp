@@ -1,5 +1,6 @@
 #include "Towa.h"
 #include "..\..\Resource\MeshResource\MeshResource.h"
+#include "..\..\UI\Fade\FadeUI.h"
 
 CTowa::CTowa()
 	: m_pCamera(make_shared<CCamera>())
@@ -106,29 +107,33 @@ void CTowa::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj,
 
 		//ƒŠƒŠ[ƒXƒrƒ‹ƒh‚ÍD3DX_PI‚ðÁ‚·.
 #ifdef _DEBUG
-		if (CXInput::GetLThumbX() > INPUT_THUMB_MAX || CXInput::GetLThumbX() < INPUT_THUMB_MIN ||
-			CXInput::GetLThumbY() > INPUT_THUMB_MAX || CXInput::GetLThumbY() < INPUT_THUMB_MIN) {
-			if (GetBitFlag(BitFlag::isCameraMoveUp) == true) {
-				D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
-				m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
-			}
-			else {
-				D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
-				m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
+		if( CFadeUI::isActive() == false && m_isGamePause == false ){
+			if (CXInput::GetLThumbX() > INPUT_THUMB_MAX || CXInput::GetLThumbX() < INPUT_THUMB_MIN ||
+				CXInput::GetLThumbY() > INPUT_THUMB_MAX || CXInput::GetLThumbY() < INPUT_THUMB_MIN) {
+				if (GetBitFlag(BitFlag::isCameraMoveUp) == true) {
+					D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
+					m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
+				}
+				else {
+					D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
+					m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
+				}
 			}
 		}
 #else
-		if (CXInput::GetLThumbX() > INPUT_THUMB_MAX || CXInput::GetLThumbX() < INPUT_THUMB_MIN ||
-			CXInput::GetLThumbY() > INPUT_THUMB_MAX || CXInput::GetLThumbY() < INPUT_THUMB_MIN) {
-			if (GetBitFlag(BitFlag::isCameraMoveUp) == true) {
-				D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
-				m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
+		if( CFadeUI::isActive() == false && m_isGamePause == false ){
+			if (CXInput::GetLThumbX() > INPUT_THUMB_MAX || CXInput::GetLThumbX() < INPUT_THUMB_MIN ||
+				CXInput::GetLThumbY() > INPUT_THUMB_MAX || CXInput::GetLThumbY() < INPUT_THUMB_MIN) {
+				if (GetBitFlag(BitFlag::isCameraMoveUp) == true) {
+					D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
+					m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
+				}
+				else {
+					D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
+					m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
+				}
 			}
-			else {
-				D3DXVECTOR3 vRot(0.0f, m_pCamera->GetCameraRadian() + m_vRotation.y, 0.0f);
-				m_pSkinMesh->SetRotation(vRot);	//YŽ²‚ð‰ñ“].
-			}
-		}
+	}
 #endif
 	}
 
@@ -306,38 +311,28 @@ void CTowa::FollowSayaka(shared_ptr<CObjectBase> pObj)
 {
 	if (pObj->GetObjectNo() != enObjectNo::Sayaka) return;
 
-	if (m_pCollision->isSphereCollision(pObj->GetSphere()) == false) {
-		float fDistance = GetTwoDistance(m_vPosition, pObj->GetPosition());
-		float fRadian = GetTwoRadian(m_vPosition, pObj->GetPosition());
+	float fDistance = GetTwoDistance( m_vPosition, pObj->GetPosition() );
+	float fRadian = GetTwoRadian( m_vPosition, pObj->GetPosition() );
 
-		if (fDistance > 1.5f) {
-			m_vRotation.y = fRadian;
-			m_vPosition += AxisZProc(m_vRotation.y) * FOLLOW_SPEED;
-			m_vRotation.y += D3DX_PI;
-		}
-		float x = fabsf(m_vOldPosition.x - m_vPosition.x);
-		float z = fabsf(m_vOldPosition.z - m_vPosition.z);
-		if (x <= 0.085f && z <= 0.085f ) {
+	if( fDistance > 1.5f ){
+		m_vRotation.y = fRadian;
+		m_vPosition += AxisZProc( m_vRotation.y ) * FOLLOW_SPEED;
+		m_vRotation.y += D3DX_PI;
+	}
+	float dis = GetTwoDistance( m_vPosition, m_vOldPosition );
+	if( fDistance < 1.47f ){
+		m_isWalk = false;
+	} else {
+		m_isWalk = true;
+		if( dis < 0.16f ){
 			m_isWalk = false;
-		}
-		else {
+		} else {
 			m_isWalk = true;
 		}
-		if (m_onGround == true) m_vOldPosition = m_vPosition;
-	}
-	else
-	{
-		float fDistance = GetTwoDistance( m_vPosition, pObj->GetPosition() );
-		float fRadian = GetTwoRadian( m_vPosition, pObj->GetPosition() );
-
-		if( fDistance > 2.0f ){
-			m_isWalk = false;
-		}
-		if (m_onGround == true) {
-			m_vPosition = m_vOldPosition;
-		}
 	}
 
+
+	if( m_onGround == true ) m_vOldPosition = m_vPosition;
 }
 
 void CTowa::Move()
@@ -357,6 +352,12 @@ void CTowa::AnimetionControll()
 
 	if (m_isGoal == true) {
 		m_OldAnimNo = TowaAnim::Happy;
+	}
+
+	if( m_isGamePause == true ){
+		m_dAnimeSpeed = 0.0;
+	} else{
+		m_dAnimeSpeed = ANIM_SPEED.at( m_OldAnimNo );
 	}
 
 	switch (m_OldAnimNo) {

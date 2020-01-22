@@ -161,23 +161,23 @@ void CObjectManager::InitSignboardSpraite( shared_ptr<CObjectBase> pObj, vector<
 	// èÊÇÍÇÈè∞.
 	if( pObj->GetObjectNo() == enObjectNo::InvisibleFloor ){
 		ss.emplace_back();
-		ss[ss.size() - 1].fFloorUV = 0.0f;
-		// èÊÇÍÇ»Ç¢è∞.
+		ss[ss.size() - 1].fFloorUV = 0.25f;
+	// èÊÇÍÇ»Ç¢è∞.
 	} else if( pObj->GetObjectNo() == enObjectNo::SlipThroughFloor ){
 		ss.emplace_back();
-		ss[ss.size() - 1].fFloorUV = 0.25f;
+		ss[ss.size() - 1].fFloorUV = 0.5f;
 	} else if( pObj->GetObjectNo() == enObjectNo::InvisibleStartFloor ){
 		ss.emplace_back();
-		ss[ss.size() - 1].fFloorUV = 0.5f;
+		ss[ss.size() - 1].fFloorUV = 0.75f;
 	} else if( pObj->GetObjectNo() == enObjectNo::InvisibleEndFloor ){
 		ss.emplace_back();
-		ss[ss.size() - 1].fFloorUV = 0.75f;
+		ss[ss.size() - 1].fFloorUV = 0.0f;
 	} else{
 		return;
 	}
-	const int BASE_W = 88 * 3;
-	const int SIZE_W = 22 * 3;
-	const int SIZE_H = 22 * 3;
+	const int BASE_W = 88 * 4;
+	const int SIZE_W = 22 * 4;
+	const int SIZE_H = 22 * 4;
 	// ÉãÅ[ÉgÇÃçÏê¨.
 	ss[ss.size() - 1].Base.w = BASE_W;
 	ss[ss.size() - 1].Base.h = SIZE_H;
@@ -233,8 +233,8 @@ void CObjectManager::InitSignboardRoutePosition( vector<CMultiTexture::SPRITE_ST
 		}
 		float Pos_x = ( ( max_Posx / 2.0f ) - ( s.vPos.x / 2.0f ) );
 		float Pos_y = ( ( max_Posy / 2.0f ) - ( s.vPos.y / 2.0f ) );
-		s.vPos.x = ( 400 + Pos_x * s.Base.w / 2 ) - ( Pos_x * 50 );
-		s.vPos.y = ( 450 - Pos_y * s.Base.h / 2 ) - ( Pos_y * 50 );
+		s.vPos.x = ( 300 + Pos_x * s.Base.w / 2 ) - ( Pos_x * 75 );
+		s.vPos.y = ( 450 - Pos_y * s.Base.h / 2 ) - ( Pos_y * 30 );
 	}
 }
 
