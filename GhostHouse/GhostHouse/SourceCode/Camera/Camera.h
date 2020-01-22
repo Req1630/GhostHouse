@@ -19,12 +19,14 @@
 #pragma comment(lib, "d3dx11.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dx10.lib")	//「D3DX～」の定義使用時に必要.
-
+//avavava
+//lol
 //extern float CameraRotationToRadian;
 
 class CCamera
 {
 private:
+	const int test = 2;
 	const float CAMERA_ROTATION_SPEED = 2.3f;
 	const float MOVE_SPEED = 0.3f;
 	const float CAMERA_UP_DISTANCE = 16.0f;
