@@ -10,7 +10,7 @@ public:
 	{
 		SetObjectInfo( objInfo );
 		m_pCollision = make_shared<CCollisionManager>( &m_vPosition, &m_vRotation.y );
-		m_fScale = MODEL_SCALE;
+		m_fScale = 0.08f;
 	}
 	CInvisibleWall()
 	{
