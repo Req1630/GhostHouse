@@ -3,7 +3,8 @@
 #include "..\..\XInput\XInput.h"
 
 CSignboard::CSignboard()
-	: m_pStaticMesh	( nullptr )
+	: m_pStaticMesh		( nullptr )
+	, m_MoveDistance	( 0.0f )
 {
 	m_vPosition	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vRotation	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
@@ -23,9 +24,8 @@ CSignboard::~CSignboard()
 
 void CSignboard::Update(shared_ptr<CObjectBase> pObj)
 {
-//	InitSpraite( pObj );
 	if( m_pStaticMesh == nullptr )	return;
-
+	FloatingMove();
 	Action( pObj );
 }
 
@@ -54,7 +54,7 @@ void CSignboard::Load(ID3D11Device * pDevice11, ID3D11DeviceContext * pContext11
 		m_pStaticMesh = CMeshResorce::GetStatic( MAIN_MODEL_NAME );
 		if( m_pStaticMesh != nullptr ){
 			m_pCollision->Init( m_pStaticMesh->GetMesh() );
-			m_pCollision->GetSphere()->SetRadius( 1.0f );
+			m_pCollision->GetSphere()->SetRadius( 2.0f );
 		}
 	}
 }
@@ -69,10 +69,6 @@ void CSignboard::Action( shared_ptr<CObjectBase> pObj )
 		}
 		return;
 	}
-	// スフィアの当たり判定が当たっていなければ終了.
-	//if( m_pCollision->isSphereCollision( pObj->GetSphere() ) == false )	return;
-
-	// アクションボタンフラグを立てる
 
 	// キー情報を受け取る.
 	if( CXInput::IsPress( XINPUT_GAMEPAD_B ) == false ) return;
@@ -85,6 +81,14 @@ void CSignboard::Action( shared_ptr<CObjectBase> pObj )
 	}
 }
 
+void CSignboard::FloatingMove()
+{
+	m_vPosition.y += sinf( m_MoveDistance ) * MOVE_DISTANCE;
+	m_MoveDistance += 0.04f;
+	if( m_MoveDistance >= 360.0f ){
+		m_MoveDistance += MOVE_DISTANCE;
+	}
+}
 
 LPD3DXMESH CSignboard::GetMeshData()
 {

@@ -8,6 +8,8 @@ class CSignboard : public CGimmickBase
 {
 	const char*	MAIN_MODEL_NAME = "Signboard";	// édólÉÇÉfÉãñº.
 	const float MODEL_SCALE		= 0.08f;
+
+	const float MOVE_DISTANCE	= 0.03f;
 public:
 	CSignboard( const stObjectInfo& objInfo );
 	~CSignboard();
@@ -28,7 +30,11 @@ private:
 	// ìÆçÏä÷êî.
 	virtual void Action( shared_ptr<CObjectBase> pObj )	override;
 
+	void FloatingMove();
+
 	shared_ptr<CDX9Mesh>		m_pStaticMesh;
+
+	float m_MoveDistance;
 };
 
 #endif	// #ifndef SINGNBOARD_H.
