@@ -4,22 +4,18 @@
 #include "..\..\XAudio2\SoundManager.h"
 #include "..\..\XAudio2\PlaySEThread.h"
 
-#include "..\..\Command\Command.h"
-
-#define _CRT_SECURE_NO_WARNINGS
-
 CGameEndScene::CGameEndScene( shared_ptr<CSceneManager> sceneManager )
-	: CSceneBase( sceneManager )
+	: CSceneBase		( sceneManager )
 
-	, m_pGameEndImage(nullptr)
-	, m_isLoadEnd( false )
-	, m_isNextScene( false )
-	, m_isChangeScene( false )
-	, m_bPushDownKey( false )
-	, m_bPushUpKey( false )
-	, m_isEnd( false )
-	, ThreadExitCode( -1 )
-	, m_bThreadRelease( false )
+	, m_pGameEndImage	(nullptr)
+	, m_isLoadEnd		( false )
+	, m_isNextScene		( false )
+	, m_isChangeScene	( false )
+	, m_bPushDownKey	( false )
+	, m_bPushUpKey		( false )
+	, m_isEnd			( false )
+	, ThreadExitCode	( -1 )
+	, m_bThreadRelease	( false )
 {
 
 	CFadeUI::Init();
@@ -34,7 +30,6 @@ CGameEndScene::CGameEndScene( shared_ptr<CSceneManager> sceneManager )
 	InThreadID = BGMThread.get_id();
 	//BGMをフェードインさせる為に、ボリュームを0に.
 	CSoundManager::SetBGMVolme( "Title", 0.2f );
-	CCommand::Initialize();
 }
 
 CGameEndScene::~CGameEndScene()
@@ -114,8 +109,6 @@ bool CGameEndScene::Release()
 {
 	GetExitCodeThread( BGMThread.native_handle(), &ThreadExitCode );
 
-	//ThreadExitCode = 1234567890;
-	//ThreadExitCode = 1234567890;
 	if( ThreadExitCode == 0 ){
 		if( InThreadID == BGMThread.get_id() ){
 			m_isEnd = true;				//曲をストップした場合、ストップを命令したコードの中で
