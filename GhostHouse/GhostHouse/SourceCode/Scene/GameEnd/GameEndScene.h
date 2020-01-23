@@ -5,19 +5,19 @@
 #include "..\..\Resource\SpriteResouce\SpriteResouce.h"
 #include <thread>
 
-class clsGameEndScene : public clsSceneBase
+class CGameEndScene : public CSceneBase
 {
 private:
 	// ゲームパッドのスティックの傾きの遊び.
 	int STICK_IDLING = 32500;
 
 public:
-	clsGameEndScene( shared_ptr<clsSceneManager> sceneManager );
-	virtual ~clsGameEndScene();
+	CGameEndScene( shared_ptr<CSceneManager> sceneManager );
+	virtual ~CGameEndScene();
 
 	void Load( HWND hWnd, ID3D11Device* pDevice11,
 		ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 ) override;
-	void Updata() override;
+	void Update() override;
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 		Light& stLight, stCAMERA& stCamera ) override;
 

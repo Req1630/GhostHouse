@@ -11,16 +11,16 @@
 
 #include <thread>
 
-class clsStageSelect : public clsSceneBase
+class CStageSelect : public CSceneBase
 {
 	const std::string BGM_NAME = "StageSelect";
 public:
-	clsStageSelect( shared_ptr<clsSceneManager> &sceneManager );
-	virtual ~clsStageSelect();
+	CStageSelect( shared_ptr<CSceneManager> &sceneManager );
+	virtual ~CStageSelect();
 
 	void Load( HWND hWnd, ID3D11Device* pDevice11,
 		ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 ) override;
-	void Updata() override;
+	void Update() override;
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, 
 		Light& stLight, stCAMERA& stCamera ) override;
 

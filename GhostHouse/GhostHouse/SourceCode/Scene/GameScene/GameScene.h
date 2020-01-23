@@ -26,19 +26,19 @@ enum class enSceneState
 	Max,
 };
 
-class clsGameScene : public clsSceneBase
+class CGameScene : public CSceneBase
 {
 	// ゲームパッドのスティックの傾きの遊び.
 	const int STICK_IDLING = 30000;
 	const std::string MAIN_BGM_NAME = "GameMain";
 	const std::string OVER_BGM_NAME = "GameOver";
 public:
-	clsGameScene( shared_ptr<clsSceneManager> &sceneManager );
-	virtual ~clsGameScene();
+	CGameScene( shared_ptr<CSceneManager> &sceneManager );
+	virtual ~CGameScene();
 
 	void Load( HWND hWnd, ID3D11Device* pDevice11,
 		ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 ) override;
-	void Updata() override;
+	void Update() override;
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 		Light& stLight, stCAMERA& stCamera ) override;
 

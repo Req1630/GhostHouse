@@ -17,19 +17,19 @@
 
 #include <thread>
 
-class clsTitleScene : public clsSceneBase
+class CTitleScene : public CSceneBase
 {
 private:
 	// ゲームパッドのスティックの傾きの遊び.
 	int STICK_IDLING	= 32500;
 
 public:
-	clsTitleScene( shared_ptr<clsSceneManager> sceneManager );
-	virtual ~clsTitleScene();
+	CTitleScene( shared_ptr<CSceneManager> sceneManager );
+	virtual ~CTitleScene();
 
 	void Load( HWND hWnd, ID3D11Device* pDevice11,
 		ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 ) override;
-	void Updata() override;
+	void Update() override;
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 		Light& stLight, stCAMERA& stCamera ) override;
 

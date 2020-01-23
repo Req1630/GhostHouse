@@ -107,7 +107,7 @@ private:
 //----------------------------
 
 	// シーン管理クラス.
-	shared_ptr<clsSceneManager> pSceneManager;
+	shared_ptr<CSceneManager> pSceneManager;
 	bool	m_isLoadCheck;
 };
 

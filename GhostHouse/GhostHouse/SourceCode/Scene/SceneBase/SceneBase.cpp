@@ -1,5 +1,5 @@
 #include "SceneBase.h"
 
-clsSceneBase::clsSceneBase( shared_ptr<clsSceneManager> sceneManager )
+CSceneBase::CSceneBase( shared_ptr<CSceneManager> sceneManager )
 	: m_pSceneManager	( sceneManager )
 {}

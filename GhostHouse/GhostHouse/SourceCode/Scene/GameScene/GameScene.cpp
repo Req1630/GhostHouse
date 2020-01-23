@@ -7,8 +7,8 @@
 #include "..\..\Resource\ModelResource\DX9Mesh\CDX9Mesh.h"
 #include "..\..\Resource\TutorialText\TutorialTextLoad.h"
 
-clsGameScene::clsGameScene( shared_ptr<clsSceneManager> &sceneManager )
-	: clsSceneBase		( sceneManager )
+CGameScene::CGameScene( shared_ptr<CSceneManager> &sceneManager )
+	: CSceneBase		( sceneManager )
 
 	, m_pSatage			( make_unique<CStage>() )
 	, m_pPauseUI		( make_unique<CPauseUI>() )
@@ -39,14 +39,14 @@ clsGameScene::clsGameScene( shared_ptr<clsSceneManager> &sceneManager )
 	CSoundManager::SetBGMVolme( MAIN_BGM_NAME, 0.0f );
 }
 
-clsGameScene::~clsGameScene()
+CGameScene::~CGameScene()
 {
 	m_isEnd = true;
 	while( Release() == false ){}
 }
 
 
-void clsGameScene::Load( HWND hWnd, ID3D11Device* pDevice11,
+void CGameScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 )
 {
 	// ステージの読み込み.
@@ -58,7 +58,7 @@ void clsGameScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	CTutorialText::SetArrayNumber(0);
 }
 
-void clsGameScene::Updata()
+void CGameScene::Update()
 {
 	if (CSoundManager::GetBGMVolme(MAIN_BGM_NAME) != -1) {
 		if (CSoundManager::GetBGMVolme(MAIN_BGM_NAME) != 1.0f) {
@@ -85,7 +85,7 @@ void clsGameScene::Updata()
 }
 
 
-void clsGameScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CGameScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	CPlaySEThread::Updata();
@@ -111,7 +111,7 @@ void clsGameScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	m_pWipeEffectUI->Render();
 }
 
-void clsGameScene::GameUpdate()
+void CGameScene::GameUpdate()
 {
 	// ステージの更新処理.
 	if( m_pWipeEffectUI->isActive() == false ){
@@ -131,7 +131,7 @@ void clsGameScene::GameUpdate()
 		m_fAlpha += 0.01f;
 		m_pWipeEffectUI->SetEnd();
 		if( m_fAlpha >= 1.0f ){
-			m_pSceneManager->Change( make_shared<clsGameEndScene>( m_pSceneManager ) );
+			m_pSceneManager->Change( make_shared<CGameEndScene>( m_pSceneManager ) );
 			return;
 		}
 	}
@@ -154,14 +154,14 @@ void clsGameScene::GameUpdate()
 	}
 }
 
-void clsGameScene::GameRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CGameScene::GameRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	// ステージの描画.
 	m_pSatage->Render( mView, mProj, stLight, stCamera );
 }
 
-void clsGameScene::PauseUpdate()
+void CGameScene::PauseUpdate()
 {
 	m_pPauseUI->Update();
 
@@ -189,7 +189,7 @@ void clsGameScene::PauseUpdate()
 	}
 }
 
-void clsGameScene::PauseRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CGameScene::PauseRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	// ステージの描画.
@@ -197,7 +197,7 @@ void clsGameScene::PauseRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	m_pPauseUI->Render();
 }
 
-void clsGameScene::GameOverUpdate()
+void CGameScene::GameOverUpdate()
 {
 	CPlaySEThread::Updata();
 	m_pGameOverUI->Upadate();
@@ -224,7 +224,7 @@ void clsGameScene::GameOverUpdate()
 	}
 }
 
-void clsGameScene::GameOverRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CGameScene::GameOverRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	m_pSatage->Render( mView, mProj, stLight, stCamera );
@@ -232,7 +232,7 @@ void clsGameScene::GameOverRender( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 }
 
 
-void clsGameScene::PauseNextScene()
+void CGameScene::PauseNextScene()
 {
 	switch( m_pPauseUI->GetNowMenuState() ){
 		case CPauseUI::ToTitle:
@@ -240,7 +240,7 @@ void clsGameScene::PauseNextScene()
 			m_isEnd = true;
 			CSoundManager::StopBGMByName( MAIN_BGM_NAME );
 			while( Release() == false ){}
-			m_pSceneManager->Swap( make_shared<clsTitleScene>( m_pSceneManager ) );
+			m_pSceneManager->Swap( make_shared<CTitleScene>( m_pSceneManager ) );
 
 			break;
 		case CPauseUI::ToGame:
@@ -252,7 +252,7 @@ void clsGameScene::PauseNextScene()
 	}
 }
 
-void clsGameScene::GameOverNextScene()
+void CGameScene::GameOverNextScene()
 {
 	switch( m_pGameOverUI->GetNowMenuState() ){
 		case CGameOverUI::Continue:
@@ -277,7 +277,7 @@ void clsGameScene::GameOverNextScene()
 			m_isEnd = true;
 			CSoundManager::StopBGMByName( OVER_BGM_NAME );
 			while( Release() == false ){}
-			m_pSceneManager->Swap( make_shared<clsTitleScene>( m_pSceneManager ) );
+			m_pSceneManager->Swap( make_shared<CTitleScene>( m_pSceneManager ) );
 
 			break;
 		default:
@@ -285,7 +285,7 @@ void clsGameScene::GameOverNextScene()
 	}
 }
 
-bool clsGameScene::Release()
+bool CGameScene::Release()
 {
 	ThreadExitCode = 0;
 	GetExitCodeThread( BGMThread.native_handle(), &ThreadExitCode );

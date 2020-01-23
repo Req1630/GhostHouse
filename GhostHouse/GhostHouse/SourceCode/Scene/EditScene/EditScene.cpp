@@ -10,8 +10,8 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-clsEditScene::clsEditScene( shared_ptr<clsSceneManager> sceneManager )
-	: clsSceneBase		( sceneManager )
+CEditScene::CEditScene( shared_ptr<CSceneManager> sceneManager )
+	: CSceneBase		( sceneManager )
 	, m_pEdit			( make_unique<CEdit>() )
 	, m_isImGuiCreate	( false )
 	, m_isEnd			( false )
@@ -19,14 +19,14 @@ clsEditScene::clsEditScene( shared_ptr<clsSceneManager> sceneManager )
 {
 }
 
-clsEditScene::~clsEditScene()
+CEditScene::~CEditScene()
 {
 	ImGui_ImplWin32_Shutdown();
 	ImGui_ImplDX11_Shutdown();
 	ImGui::DestroyContext();
 }
 
-void clsEditScene::Load( 
+void CEditScene::Load( 
 	HWND hWnd, 
 	ID3D11Device* pDevice11,
 	ID3D11DeviceContext* pContext11,
@@ -46,17 +46,17 @@ void clsEditScene::Load(
 	}
 }
 
-void clsEditScene::Updata()
+void CEditScene::Update()
 {
 	if( m_isImGuiCreate == false ) return;
 
 	m_pEdit->Updete();
 	if( m_pEdit->IsEditEnd() == true ){
-		m_pSceneManager->Change( make_shared<clsTitleScene>( m_pSceneManager ) );
+		m_pSceneManager->Change( make_shared<CTitleScene>( m_pSceneManager ) );
 	}
 }
 
-void clsEditScene::Render( 
+void CEditScene::Render( 
 	D3DXMATRIX& mView, 
 	D3DXMATRIX& mProj,
 	Light& stLight, 

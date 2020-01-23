@@ -4,18 +4,18 @@
 #include "..\SceneBase\SceneBase.h"
 #include "..\..\Edit\Edit.h"
 
-class clsEditScene : public clsSceneBase
+class CEditScene : public CSceneBase
 {
 public:
-	clsEditScene( shared_ptr<clsSceneManager> sceneManager );
-	~clsEditScene();
+	CEditScene( shared_ptr<CSceneManager> sceneManager );
+	~CEditScene();
 
 	void Load( 
 		HWND hWnd, 
 		ID3D11Device* pDevice11,
 		ID3D11DeviceContext* pContext11,
 		LPDIRECT3DDEVICE9 pDevice9 ) override;
-	void Updata() override;
+	void Update() override;
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 		Light& stLight, stCAMERA& stCamera ) override;
 

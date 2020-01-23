@@ -100,8 +100,8 @@ CMain::CMain()
 	, pSceneManager				( nullptr )
 	, m_isLoadCheck				( false )
 {
-	pSceneManager = make_shared<clsSceneManager>();
-	pSceneManager->Push( make_shared<clsTitleScene>(pSceneManager));
+	pSceneManager = make_shared<CSceneManager>();
+	pSceneManager->Push( make_shared<CTitleScene>(pSceneManager));
 	m_Light = Light();
 }
 

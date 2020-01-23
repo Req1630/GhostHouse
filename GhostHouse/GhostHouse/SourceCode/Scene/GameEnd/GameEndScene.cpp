@@ -8,8 +8,8 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-clsGameEndScene::clsGameEndScene( shared_ptr<clsSceneManager> sceneManager )
-	: clsSceneBase( sceneManager )
+CGameEndScene::CGameEndScene( shared_ptr<CSceneManager> sceneManager )
+	: CSceneBase( sceneManager )
 
 	, m_pGameEndImage(nullptr)
 	, m_isLoadEnd( false )
@@ -37,14 +37,14 @@ clsGameEndScene::clsGameEndScene( shared_ptr<clsSceneManager> sceneManager )
 	CCommand::Initialize();
 }
 
-clsGameEndScene::~clsGameEndScene()
+CGameEndScene::~CGameEndScene()
 {
 	m_isEnd = true;
 	while( Release() == false ){
 	}
 }
 
-void clsGameEndScene::Load( HWND hWnd, ID3D11Device* pDevice11,
+void CGameEndScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 )
 {
 	if( m_isLoadEnd == true )	return;
@@ -58,7 +58,7 @@ void clsGameEndScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	}
 }
 
-void clsGameEndScene::Updata()
+void CGameEndScene::Update()
 {
 	if( CSoundManager::GetBGMVolme( "Title" ) != -1 ){
 		if( CSoundManager::GetBGMVolme( "Title" ) != 1.0f && m_isNextScene == false ){
@@ -71,7 +71,7 @@ void clsGameEndScene::Updata()
 	NextScene();
 	if( m_isChangeScene == true ){
 		Sleep( 10 );
-		m_pSceneManager->Swap( make_shared<clsTitleScene>( m_pSceneManager ) );
+		m_pSceneManager->Swap( make_shared<CTitleScene>( m_pSceneManager ) );
 	}
 	CPlaySEThread::Updata();
 
@@ -90,7 +90,7 @@ void clsGameEndScene::Updata()
 	if( CXInput::GetLThumbY() > -STICK_IDLING )	m_bPushDownKey = false;
 }
 
-void clsGameEndScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CGameEndScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	if( m_pGameEndImage == nullptr ) return;
@@ -98,7 +98,7 @@ void clsGameEndScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	m_pGameEndImage->Render();
 }
 
-void clsGameEndScene::NextScene()
+void CGameEndScene::NextScene()
 {
 	if( CFadeUI::isEnd() == false ) return;
 	if( m_isNextScene == false ) return;
@@ -110,8 +110,7 @@ void clsGameEndScene::NextScene()
 	
 }
 
-
-bool clsGameEndScene::Release()
+bool CGameEndScene::Release()
 {
 	GetExitCodeThread( BGMThread.native_handle(), &ThreadExitCode );
 

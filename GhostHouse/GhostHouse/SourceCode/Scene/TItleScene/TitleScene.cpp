@@ -8,8 +8,8 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-clsTitleScene::clsTitleScene( shared_ptr<clsSceneManager> sceneManager )
-	: clsSceneBase		( sceneManager )
+CTitleScene::CTitleScene( shared_ptr<CSceneManager> sceneManager )
+	: CSceneBase		( sceneManager )
 	, m_pSatage			( make_unique<CStage>() )
 	, m_pTitleUI		( make_unique<CTitleUI>() )
 	, m_isLoadEnd		( false )
@@ -39,13 +39,13 @@ clsTitleScene::clsTitleScene( shared_ptr<clsSceneManager> sceneManager )
 	CCommand::Initialize();
 }
 
-clsTitleScene::~clsTitleScene()
+CTitleScene::~CTitleScene()
 {
 	m_isEnd = true;
 	while( Release() == false ){}
 }
 
-void clsTitleScene::Load( HWND hWnd, ID3D11Device* pDevice11,
+void CTitleScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 )
 {
 	if( m_isLoadEnd == true )	return;
@@ -58,7 +58,7 @@ void clsTitleScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	}
 }
 
-void clsTitleScene::Updata()
+void CTitleScene::Update()
 {
 	if (CSoundManager::GetBGMVolme("Title") != -1) {
 		if (CSoundManager::GetBGMVolme("Title") != 1.0f && m_isNextScene == false) {
@@ -74,11 +74,11 @@ void clsTitleScene::Updata()
 	NextScene();
 	if (m_isChangeScene == true) {
 		Sleep(10);
-		m_pSceneManager->Push( make_shared<clsStageSelect>(m_pSceneManager) );
+		m_pSceneManager->Push( make_shared<CStageSelect>(m_pSceneManager) );
 	}
 	if( m_isEditChangeScene == true ){
 		Sleep(10);
-		m_pSceneManager->Change( make_shared<clsEditScene>(m_pSceneManager) );
+		m_pSceneManager->Change( make_shared<CEditScene>(m_pSceneManager) );
 	}
 	CPlaySEThread::Updata();
 
@@ -121,7 +121,7 @@ void clsTitleScene::Updata()
 	}
 }
 
-void clsTitleScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CTitleScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	m_pSatage->SetCameraOFF();
@@ -133,7 +133,7 @@ void clsTitleScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	m_pTitleUI->Render();
 }
 
-void clsTitleScene::NextScene()
+void CTitleScene::NextScene()
 {
 	if( CFadeUI::isEnd() == false ) return;
 	if( m_isNextScene == false &&
@@ -167,7 +167,7 @@ void clsTitleScene::NextScene()
 }
 
 
-bool clsTitleScene::Release()
+bool CTitleScene::Release()
 {
 	GetExitCodeThread( BGMThread.native_handle(), &ThreadExitCode );
 

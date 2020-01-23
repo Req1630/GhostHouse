@@ -2,8 +2,8 @@
 #include "..\..\XAudio2\SoundManager.h"
 #include "..\..\XAudio2\PlaySEThread.h"
 
-clsStageSelect::clsStageSelect( shared_ptr<clsSceneManager> &sceneManager )
-	: clsSceneBase		( sceneManager )
+CStageSelect::CStageSelect( shared_ptr<CSceneManager> &sceneManager )
+	: CSceneBase		( sceneManager )
 	, m_bLoadFalag		( false )
 	, m_pStageSelectUI	( make_unique<CStageSelectUI>() )
 	, m_isNextScene		( false )
@@ -25,13 +25,13 @@ clsStageSelect::clsStageSelect( shared_ptr<clsSceneManager> &sceneManager )
 	CSoundManager::SetBGMVolme( BGM_NAME, 0.0f );
 }
 
-clsStageSelect::~clsStageSelect()
+CStageSelect::~CStageSelect()
 {
 	m_isEnd = true;
 	while( Release() == false ){}
 }
 
-void clsStageSelect::Load( HWND hWnd, ID3D11Device* pDevice11,
+void CStageSelect::Load( HWND hWnd, ID3D11Device* pDevice11,
 	ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 )
 {
 	if( m_bLoadFalag == true ) return;
@@ -42,7 +42,7 @@ void clsStageSelect::Load( HWND hWnd, ID3D11Device* pDevice11,
 	}
 }
 
-void clsStageSelect::Updata()
+void CStageSelect::Update()
 {
 	CPlaySEThread::Updata();
 	// -1だったらBGMが無い or 消されているのでスルー.
@@ -54,7 +54,7 @@ void clsStageSelect::Updata()
 			Sleep(10);
 			m_bChangeScene = false;
 			Release();
-			m_pSceneManager->Change(make_shared<clsGameScene>(m_pSceneManager));
+			m_pSceneManager->Change(make_shared<CGameScene>(m_pSceneManager));
 			return;
 		}
 
@@ -86,14 +86,14 @@ void clsStageSelect::Updata()
 
 }
 
-void clsStageSelect::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
+void CStageSelect::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	// ステージセレクトUIの表示.
 	m_pStageSelectUI->Render();
 }
 
-bool clsStageSelect::NextScene()
+bool CStageSelect::NextScene()
 {
 	if( CFadeUI::isEnd() == false ) return false;
 	if( m_isNextScene == false ) return false;
@@ -107,7 +107,7 @@ bool clsStageSelect::NextScene()
 	return false;
 }
 
-bool clsStageSelect::Release()
+bool CStageSelect::Release()
 {
 	GetExitCodeThread( BGMThread.native_handle(), &ThreadExitCode );
 

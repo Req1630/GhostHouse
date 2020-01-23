@@ -29,22 +29,25 @@ using namespace std;
 struct Light;
 struct stCAMERA;
 
-class clsSceneManager;
+class CSceneManager;
 
-class clsSceneBase
+class CSceneBase
 {
 public:
-	clsSceneBase( shared_ptr<clsSceneManager> sceneManager );
-	virtual ~clsSceneBase(){};
+	CSceneBase( shared_ptr<CSceneManager> sceneManager );
+	virtual ~CSceneBase(){};
 	
+	// ì«Ç›çûÇ›ä÷êî.
 	virtual void Load( HWND hWnd, ID3D11Device* pDevice11,
 		ID3D11DeviceContext* pContext11, LPDIRECT3DDEVICE9 pDevice9 ) = 0;
-	virtual void Updata() = 0;
+	// çXêVä÷êî.
+	virtual void Update() = 0;
+	// ï`âÊä÷êî.
 	virtual void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 		Light& stLight, stCAMERA& stCamera ) = 0;
 
 protected:
-	shared_ptr<clsSceneManager> m_pSceneManager;
+	shared_ptr<CSceneManager> m_pSceneManager;
 };
 
 #endif // #ifndef SCENE_BASE_H.
