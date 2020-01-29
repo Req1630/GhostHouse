@@ -320,15 +320,17 @@ void CTowa::FollowSayaka(shared_ptr<CObjectBase> pObj)
 		m_vRotation.y += D3DX_PI;
 	}
 	float dis = GetTwoDistance( m_vPosition, m_vOldPosition );
-	if( fDistance < 1.47f ){
+	if( fDistance < 1.48f ){
 		m_isWalk = false;
-	} else {
+	} else if( fDistance < 1.4f ) {
 		m_isWalk = true;
-		if( dis < 0.16f ){
+		if( 0.05f > dis ){
 			m_isWalk = false;
 		} else {
 			m_isWalk = true;
 		}
+	} else {
+		m_isWalk = true;
 	}
 
 

@@ -11,7 +11,6 @@ CInvisibleStartFloor::CInvisibleStartFloor( const stObjectInfo& objInfo )
 	: m_State( 0 )
 	, m_isNowHit( false )
 	, m_isOlsHit( false )
-	, m_pDebugSphere( make_unique<CSphere>() )
 {
 	SetObjectInfo( objInfo );
 	m_fScale = MODEL_SCALE;
@@ -40,9 +39,6 @@ void CInvisibleStartFloor::Render( D3DXMATRIX & mView, D3DXMATRIX & mProj, Light
 	m_pStaticMesh->SetBlend( true );
 	m_pStaticMesh->Render( mView, mProj, stLight, stCamera );	// •`‰æ.
 	m_pStaticMesh->SetBlend( false );
-
-	m_pDebugSphere->SetPosition( m_vPosition );
-	m_pDebugSphere->Render( mView, mProj );
 }
 
 void CInvisibleStartFloor::Collision( shared_ptr<CObjectBase> pObj )
@@ -98,7 +94,6 @@ void CInvisibleStartFloor::Load( ID3D11Device * pDevice11, ID3D11DeviceContext *
 		if( m_pStaticMesh != nullptr ){
 			m_pCollision->Init( m_pStaticMesh->GetMesh() );
 			m_pCollision->GetSphere()->SetRadius( COLLISION_RADIUS );
-			m_pDebugSphere->Init( pDevice11, pContext11, COLLISION_RADIUS );
 		}
 	}
 }

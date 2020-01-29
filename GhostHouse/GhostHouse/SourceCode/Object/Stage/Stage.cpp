@@ -183,19 +183,19 @@ bool CStage::LoadMap()
 		init_Map = CMapLoad::GetStageNum();
 		// 前シーンで選択したステージマップの作成.
 		m_pMapList.emplace_back();
-		CMapLoad::FileRead(m_pMapList[0], "01_in_the_forest");
+		CMapLoad::FileRead(m_pMapList[0], "01_Forest");
 		m_pMapList.emplace_back();
-		CMapLoad::FileRead(m_pMapList[1], "02_In_front_of_the_house");
+		CMapLoad::FileRead(m_pMapList[1], "02_House");
 		m_pMapList.emplace_back();
-		CMapLoad::FileRead(m_pMapList[2], "03_1f_temp");
+		CMapLoad::FileRead(m_pMapList[2], "03_1Floor");
 		m_pMapList.emplace_back();
-		CMapLoad::FileRead(m_pMapList[3], "04_2f_tmp");
+		CMapLoad::FileRead(m_pMapList[3], "04_2Floor");
 		m_pMapList.emplace_back();
 		CMapLoad::FileRead(m_pMapList[4], "05_B1FloorArea1");
 		m_pMapList.emplace_back();
 		CMapLoad::FileRead(m_pMapList[5], "06_B1FloorArea2");
 		m_pMapList.emplace_back();
-		CMapLoad::FileRead(m_pMapList[6], "07_1f_end_tmp");
+		CMapLoad::FileRead(m_pMapList[6], "07_1FoorEnd");
 		if (init_Map >= static_cast<int>(m_pMapList.size())) {
 			_ASSERT_EXPR(false, L"マップの数が足りません");
 		}

@@ -16,7 +16,7 @@ private:
 	const float INIT_POSITION_Y = 0.0f;
 
 	const float MAX_WAIT_DISTANCE	= 3.0f;		// 待機時の上下の距離.
-	const float MAX_SEARCH_DISTANCE	= 6.0f;		// サーチ範囲.
+	const float MAX_SEARCH_DISTANCE	= 5.0f;		// サーチ範囲.
 
 	const float MODEL_SCALE				= 0.08f;	// モデルの大きさ.
 	const float SPHERE_COLLISION_RADIUS = 1.0f;		// 当たり判定用の半径の大きさ.

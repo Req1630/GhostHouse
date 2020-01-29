@@ -8,7 +8,7 @@ class CInvisibleEndFloor : public CGimmickBase
 {
 	const char*	MAIN_MODEL_NAME = "InvisibleEndFloor";	// Žd—lƒ‚ƒfƒ‹–¼.
 	const float MODEL_SCALE = 0.08f;
-	const float MODEL_ALPHA = 0.6f;
+	const float MODEL_ALPHA = 1.0f;
 	const float COLLISION_RADIUS = 0.1f;
 public:
 	CInvisibleEndFloor( const stObjectInfo& objInfo );
@@ -33,8 +33,6 @@ private:
 	int m_State;
 	bool m_isNowHit;
 	bool m_isOlsHit;
-
-	unique_ptr<CSphere>	m_pDebugSphere;
 };
 
 #endif	// #ifndef INVISIBLE_END_FLOOR_H.

@@ -54,7 +54,7 @@ void CSignboard::Load(ID3D11Device * pDevice11, ID3D11DeviceContext * pContext11
 		m_pStaticMesh = CMeshResorce::GetStatic( MAIN_MODEL_NAME );
 		if( m_pStaticMesh != nullptr ){
 			m_pCollision->Init( m_pStaticMesh->GetMesh() );
-			m_pCollision->GetSphere()->SetRadius( 2.0f );
+			m_pCollision->GetSphere()->SetRadius( 3.0f );
 		}
 	}
 }
