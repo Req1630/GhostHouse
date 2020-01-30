@@ -30,6 +30,7 @@ private:
 	// ウィンドウハンドル.
 	HWND		m_hWnd;
 	std::shared_ptr<CSpriteUI> m_pGameEndImage;
+	std::shared_ptr<CSpriteUI> m_pGameEndText;
 
 	bool m_isLoadEnd;	// 読み込みの終了フラグ.
 	bool m_isNextScene;	// 次のシーンへのフラグ.
@@ -38,6 +39,9 @@ private:
 
 	bool m_bPushDownKey;
 	bool m_bPushUpKey;
+
+	float m_TextAlpha;
+	float m_AlphaCount;
 
 	bool	m_isEnd;			//スレッドに対して解放許可を出すフラグ.
 	std::thread BGMThread;		//BGMを鳴らすスレッド.

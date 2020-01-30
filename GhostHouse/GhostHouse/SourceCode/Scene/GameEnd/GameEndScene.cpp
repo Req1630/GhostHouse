@@ -7,12 +7,15 @@
 CGameEndScene::CGameEndScene( shared_ptr<CSceneManager> sceneManager )
 	: CSceneBase		( sceneManager )
 
-	, m_pGameEndImage	(nullptr)
+	, m_pGameEndImage	( nullptr )
+	, m_pGameEndText	( nullptr )
 	, m_isLoadEnd		( false )
 	, m_isNextScene		( false )
 	, m_isChangeScene	( false )
 	, m_bPushDownKey	( false )
 	, m_bPushUpKey		( false )
+	, m_TextAlpha		( 1.0f )
+	, m_AlphaCount		( 0.0f )
 	, m_isEnd			( false )
 	, ThreadExitCode	( -1 )
 	, m_bThreadRelease	( false )
@@ -48,6 +51,12 @@ void CGameEndScene::Load( HWND hWnd, ID3D11Device* pDevice11,
 	if( m_pGameEndImage == nullptr ){
 		m_pGameEndImage = CSpriteResource::GetSprite("GameEnding");
 		if( m_pGameEndImage != nullptr ){
+			CFadeUI::FadeINStart();
+		}
+	}
+	if( m_pGameEndText == nullptr ){
+		m_pGameEndText = CSpriteResource::GetSprite("GameEndText");
+		if( m_pGameEndText != nullptr ){
 			CFadeUI::FadeINStart();
 		}
 	}
@@ -89,14 +98,24 @@ void CGameEndScene::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
 	if( m_pGameEndImage == nullptr ) return;
+	if( m_pGameEndText == nullptr ) return;
 
 	m_pGameEndImage->Render();
+
+	m_AlphaCount += 0.01f;
+	if( m_AlphaCount >= 360.0f ){
+		m_AlphaCount = 0.0f;
+	}
+	m_TextAlpha = fabsf( sinf( m_AlphaCount ) ) + 0.01f;
+	m_pGameEndText->SetAlpha( m_TextAlpha );
+	m_pGameEndText->Render();
 }
 
 void CGameEndScene::NextScene()
 {
 	if( CFadeUI::isEnd() == false ) return;
 	if( m_isNextScene == false ) return;
+	if( m_pGameEndText == nullptr ) return;
 
 	CFadeUI::Init();
 	m_isEnd = true;
