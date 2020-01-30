@@ -328,14 +328,14 @@ HRESULT CMain::Init()
 	InitDx9();
 	InitD3D11();
 	//////////////////////////////////////////////
-	//ALT + Enterでフルスクリーンを無効化する.
-	IDXGIFactory* pfac = nullptr;
-	//上で作ったIDXGISwapChainを使う.
-	m_pSwapChain->GetParent( __uuidof( IDXGIFactory ), (void**)&pfac );
+	////ALT + Enterでフルスクリーンを無効化する.
+	//IDXGIFactory* pfac = nullptr;
+	////上で作ったIDXGISwapChainを使う.
+	//m_pSwapChain->GetParent( __uuidof( IDXGIFactory ), (void**)&pfac );
 
-	// 余計な機能を無効にする設定をする。
-	pfac->MakeWindowAssociation( m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES
-		| DXGI_MWA_NO_ALT_ENTER );
+	//// 余計な機能を無効にする設定をする。
+	//pfac->MakeWindowAssociation( m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES
+	//	| DXGI_MWA_NO_ALT_ENTER );
 
 	////////////////////////////////////////////
 	return S_OK;

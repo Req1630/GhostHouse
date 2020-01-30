@@ -247,6 +247,7 @@ void CStage::PlayerInit(ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11
 
 	for (size_t i = 0; i < m_pMap.size(); i++) {
 		ObjSwap(m_pMap[i], enObjectNo::Sayaka, i);
+		if( i >= m_pMap.size() ) continue;
 		ObjSwap(m_pMap[i], enObjectNo::Towa, i);
 	}
 
