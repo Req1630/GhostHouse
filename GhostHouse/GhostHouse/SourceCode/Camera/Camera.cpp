@@ -43,7 +43,7 @@ CCamera::CCamera()
 CCamera::~CCamera()
 {
 }
-
+// ゲームメインの周りをまわるカメラのアップデート.
 void CCamera::UpdateCamera()
 {
 	if( CXInput::GetRThumbX() > STICKRANGE || GetAsyncKeyState( VK_RIGHT ) & 0x8000 ){
@@ -54,15 +54,15 @@ void CCamera::UpdateCamera()
 		stCamera.fDegree -= CAMERA_ROTATION_SPEED;
 	}
 }
-
+// マップエディットモードカメラアップデート.
 void CCamera::EditUpdateCamera()
 {
 	if( GetAsyncKeyState( VK_RIGHT ) & 0x8000 || CXInput::GetRThumbX() > INPUT_THUMB_MAX ){
-		Camera.m_Degree += 7.0f;
+		Camera.m_Degree += EDITCAMERA_DEGREE;
 	}
 
 	if( GetAsyncKeyState( VK_LEFT ) & 0x8000 || CXInput::GetRThumbX() < INPUT_THUMB_MIN ){
-		Camera.m_Degree -= 7.0f;
+		Camera.m_Degree -= EDITCAMERA_DEGREE;
 	}
 
 	if( GetAsyncKeyState( VK_UP ) & 0x8000 || CXInput::GetRThumbY() > INPUT_THUMB_MAX ){
@@ -103,37 +103,49 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 			SetGimickCameraMoveEnd( false );
 		}
 	}
-
+	// 見えない床ギミックでカメラを上に向かわせるステップ.
 	switch( m_Step ){
-		case 0:
-			m_vInvisiColPosiiton = vInvisibleColPos;
+		case 0:		
+			m_vInvisiColPosiiton = vInvisibleColPos;			// 見えない床のギミック始動当たり判定座標取得.
+			// カメラの座標と見えない床の当たり判定座標の距離を取得.
 			m_fColDistance = GetTwoDistance( stCamera.Pos, m_vInvisiColPosiiton );
+			// カメラの座標と見えない床の当たり判定角度を取得.
 			m_fColRadian = GetTwoRadian( stCamera.Pos, m_vInvisiColPosiiton );
-			if( m_fColDistance > 0.3f ){
+			// 距離が指定値より大きい間中に入る.
+			if( m_fColDistance > MAX_GIMMICKCOLPOS_DISTANCE){
+				// カメラの方向を見えない床に向ける.
 				stCamera.vRot.y = m_fColRadian;
+				// カメラ移動.
 				stCamera.Pos += AxisZProc( stCamera.vRot.y ) * MOVE_SPEED;
 			} else{
+				// 距離が十分なのでステップを進める.
 				m_Step++;
 			}
 			CameraRotationToRadian = m_fColRadian;
+			// カメラの座標更新.
 			m_vCamera = { stCamera.Pos.x, stCamera.Pos.y + CAMERA_UP_DISTANCE, stCamera.Pos.z };
 
 			return m_vCamera;
 		case 1:
-			m_vGimmickPosition = vInvisibleCenPos;
+			m_vGimmickPosition = vInvisibleCenPos;	// 見えない床の中心座標取得.
+			// カメラの座標と見えない床の中心座標の距離を取得.
 			m_fInvGimmickDistance = GetTwoDistance( stCamera.Pos, m_vGimmickPosition );
+			// カメラの座標と見えない床の中心座標の角度を取得.
 			m_fInvGimmickRadian = GetTwoRadian( stCamera.Pos, m_vGimmickPosition );
-			if( m_fInvGimmickDistance > 0.1f ){
+			// 距離が指定値より大きい間中に入る.
+			if( m_fInvGimmickDistance > MAX_GIMMICKPOS_DISTANCE){
+				// カメラの方向を見えない床に向ける.
 				stCamera.vRot.y = m_fInvGimmickRadian;
-				stCamera.Pos += AxisZProc( stCamera.vRot.y ) * (MOVE_SPEED - 0.2f);
+				// カメラ移動.
+				stCamera.Pos += AxisZProc( stCamera.vRot.y ) * (0.1f);
 			} else {
-				// case 2 に移動した.
-//				Oneflow = false;
-//				SetGimickCameraMoveEnd( true );
-				m_Step++;
+				// 距離は十分なのでステップを進める.
+				m+Step++;
 			}
 			CameraRotationToRadian = m_fInvGimmickRadian;
+			// カメラの座標更新.
 			m_vCamera = { stCamera.Pos.x, stCamera.Pos.y + CAMERA_UP_DISTANCE, stCamera.Pos.z };
+			// カメラの注視点を見えない床の中心座標に.
 			stCamera.vLook = vInvisibleCenPos;
 			return m_vCamera;
 		case 2:
@@ -144,6 +156,7 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 			CameraRotationToRadian = m_fInvGimmickRadian;
 			m_vCamera = { stCamera.Pos.x, stCamera.Pos.y + CAMERA_UP_DISTANCE, stCamera.Pos.z };
 			stCamera.vLook = vInvisibleCenPos;
+			// カメラの移動を終了する.
 			SetGimickCameraMoveEnd( true );
 			return m_vCamera;
 		default:
@@ -161,15 +174,17 @@ D3DXVECTOR3 CCamera::MoveCameraPos( const D3DXVECTOR3& vCenPos )
 	Camera.m_CenterZ = vCenPos.z;
 
 	//オーバーフロー対策.
-	if( stCamera.fDegree >= 360.0f ){
-		stCamera.fDegree -= 360.0f;
-	} else if( stCamera.fDegree <= -360.0f ){
-		stCamera.fDegree += 360.0f;
-	}
+	CheckOverFlow(stCamera.fDegree);
+	//if( stCamera.fDegree >= 360.0f ){
+	//	stCamera.fDegree -= 360.0f;
+	//} else if( stCamera.fDegree <= -360.0f ){
+	//	stCamera.fDegree += 360.0f;
+	//}
 
 	//角度をラジアン値に変換.
 	CameraRotationToRadian =
 		stCamera.fDegree * ( 3.14f / 180.0f );
+
 
 	//sin,cos:-1.0～1.0f.
 	stCamera.Pos.x =
@@ -191,16 +206,19 @@ D3DXVECTOR3 CCamera::EditMoveCameraPos( const D3DXVECTOR3& vCenPos )
 	Camera.m_CenterZ = vCenPos.z;
 
 	//オーバーフロー対策.
-	if( Camera.m_Degree >= 360.0f ){
-		Camera.m_Degree -= 360.0f;
-	} else if( Camera.m_Degree <= -360.0f ){
-		Camera.m_Degree += 360.0f;
-	}
-	if( Camera.m_Degree_y >= 360.0f ){
-		Camera.m_Degree_y -= 360.0f;
-	} else if( Camera.m_Degree_y <= -360.0f ){
-		Camera.m_Degree_y += 360.0f;
-	}
+	CheckOverFlow(Camera.fDegree);
+	CheckOverFlow(Camera.m_Degree_y);
+
+	//if( Camera.m_Degree >= 360.0f ){
+	//	Camera.m_Degree -= 360.0f;
+	//} else if( Camera.m_Degree <= -360.0f ){
+	//	Camera.m_Degree += 360.0f;
+	//}
+	//if( Camera.m_Degree_y >= 360.0f ){
+	//	Camera.m_Degree_y -= 360.0f;
+	//} else if( Camera.m_Degree_y <= -360.0f ){
+	//	Camera.m_Degree_y += 360.0f;
+	//}
 
 	//角度をラジアン値に変換.
 	CameraRotationToRadian =

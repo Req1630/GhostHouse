@@ -12,8 +12,6 @@ clsXAudio2PlaySound::clsXAudio2PlaySound()
 	m_maxPitch(1.4f),	//5.0fマックスかと思われます.
 	nextFirstSample(0),
 	submitCount(0),
-	m_bStop(false),
-	m_fDownVolume( 0.0f ),
 	m_FadeInStart( false ),
 	m_FadeOutStart( false )
 {
@@ -52,23 +50,15 @@ bool clsXAudio2PlaySound::Submit(std::shared_ptr<clsXAudio2WaveLoad> pWaveData, 
 	// セカンダリバッファ
 	m_Secondary = std::vector< BYTE >(pWaveData->GetWaveFmtEx().nAvgBytesPerSec * 3);
 
-
-	//XAUDIO2_BUFFER buffer;
-	//memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
-	//buffer.AudioBytes = m_pOriginData->GetWaveSize();
-	//buffer.pAudioData = m_pOriginData->GetWaveData();
-	//buffer.LoopCount = IsLoop() ? XAUDIO2_LOOP_INFINITE : 0;
-
-	//if (m_pSourceVoice)
-	//	m_pSourceVoice->SubmitSourceBuffer(&buffer);
-
 	return true;
 }
-
+// 再生中かどうかを取得する関数.
 bool clsXAudio2PlaySound::IsPlaying()const
 {
+	// SoundSourceがない場合リターン 0(再生していないときと同じ).
 	if (m_pSourceVoice == nullptr) return 0;
 	XAUDIO2_VOICE_STATE xState;
+	// SoundSourceのステート取得.
 	m_pSourceVoice->GetState(&xState);
 
 	return xState.BuffersQueued != 0;
@@ -78,11 +68,11 @@ bool clsXAudio2PlaySound::IsPlaying()const
 // 再生.
 bool clsXAudio2PlaySound::Play(const char* filename, bool& isEnd, bool& isEmergencyCall)
 {
-	static float TST = 1.0f;
+	// SoundSourceを再生.
 	m_pSourceVoice->Start(0);
-
 	while (1)
 	{
+		// 終了フラグ、緊急停止フラグが立っていればwhileループを抜ける.
 		if (isEnd == true || isEmergencyCall == true) {
 			break;
 		}
@@ -90,20 +80,20 @@ bool clsXAudio2PlaySound::Play(const char* filename, bool& isEnd, bool& isEmerge
 		XAUDIO2_VOICE_STATE state;
 		if (m_pSourceVoice == nullptr) break;
 		m_pSourceVoice->GetState(&state);
-
+		// すべて再生し終わっていたら中に入る.
 		if (state.BuffersQueued == 0 && nextFirstSample >= m_pOriginData->GetSamples(filename))
-		{
-			// すべて再生し終わっている
+		{		
 			break;
 		}
 		else if (state.BuffersQueued < 2 && nextFirstSample < m_pOriginData->GetSamples(filename))
 		{
+			// 終了フラグ、緊急停止フラグが立っていればwhileループを抜ける.
 			if (isEnd == true || isEmergencyCall == true) {
 				break;
 			}
 			// キューにバッファを追加
 			std::vector< BYTE > & buffer = submitCount & 1 ? m_Secondary : m_Primary;
-
+			// サンプラーを読み込む.
 			std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, m_pOriginData->GetWaveFmtEx().nSamplesPerSec * 3, &(buffer[0]),filename);
 			if (readSamples > 0)
 			{
@@ -131,7 +121,6 @@ bool clsXAudio2PlaySound::Play(const char* filename, bool& isEnd, bool& isEmerge
 bool clsXAudio2PlaySound::SEPlay(
 	const char * filename, bool & isEnd, bool& Reset, bool& IsPlay,bool& RePlaySE, bool& isEmergencyCall)
 {
-	m_bStop = false;
 	IsPlay = true;
 
 	if (Reset == true) {
@@ -142,8 +131,6 @@ bool clsXAudio2PlaySound::SEPlay(
 		Reset = false;
 		RePlaySE = false;
 	}
-	//SetPitch(2.0f);
-	static float TST = 1.0f;
 	SetVolume(1.0f);
 	m_pSourceVoice->Start(0);
 
@@ -191,13 +178,6 @@ bool clsXAudio2PlaySound::SEPlay(
 			}
 		}
 
-		//if (GetAsyncKeyState('P') & 0x8000) {
-		//	TST += 0.01f;
-		//	AdjustPitch(TST);
-
-		//}
-
-
 		// 過負荷にならないよう調整
 		Sleep(1);
 	}
@@ -209,7 +189,6 @@ bool clsXAudio2PlaySound::SEPlay(
 
 bool clsXAudio2PlaySound::LoopPlay(const char * filename, bool & isEnd, bool& isEmergencyCall)
 {
-	static float TST = 0.0f;
 	isEnd = false;
 	Stop();
 	if (m_pSourceVoice == nullptr) return false;
@@ -262,26 +241,22 @@ bool clsXAudio2PlaySound::LoopPlay(const char * filename, bool & isEnd, bool& is
 				++submitCount;
 			}
 			// 終わりまで読み切ったら頭から読み直し (ループ再生)
-			// 元はここにループのためのソースを入れる.
 			if (nextFirstSample >= m_pOriginData->GetSamples(filename)) nextFirstSample = 0;
 		}
-
+		// フェードインフラグが立っていれば、フェードイン.
 		if (m_FadeInStart == true) {
-			FadeInBGM(0.001f, isEmergencyCall );
+			FadeInBGM(FADE_VOLUME, isEmergencyCall );
 			m_FadeInStart = false;
 		}
-
+		// フェードアウトフラグが立っていれば、フェードイン.
 		if(m_FadeOutStart == true){
-			FadeOutBGM(-0.001f, isEmergencyCall );
+			FadeOutBGM(-FADE_VOLUME, isEmergencyCall );
 			m_FadeOutStart = false;
 		}
 
 
 		// 過負荷にならないよう調整
 		Sleep(1);
-		//// 終わりまで読み切ったら頭から読み直し (ループ再生)
-		//クッソ短い奴はここじゃないとしない.
-		//if (nextFirstSample >= reader.GetSamples()) nextFirstSample = 0;
 	}
 
 	return true;
@@ -314,17 +289,6 @@ bool clsXAudio2PlaySound::Stop()
 	return true;
 }
 
-//// サウンド最初からながしなおし.
-//bool clsXAudio2PlaySound::RePlay()
-//{
-//	if (m_pSourceVoice)
-//	{
-//		Stop();
-//		Play();
-//	}
-//	return true;
-//}
-
 // サウンド一時停止.
 bool clsXAudio2PlaySound::Pause()
 {
@@ -352,20 +316,6 @@ bool clsXAudio2PlaySound::CreateSound(std::shared_ptr<clsXAudio2WaveLoad> pWaveD
 	if (FAILED(hr))
 		return false;
 
-	//! Create Reverb
-	//IUnknown * pReverbAPO;
-	//XAudio2CreateReverb(&pReverbAPO);
-
-
-	//XAUDIO2_EFFECT_DESCRIPTOR desc;
-	//desc.InitialState = false;
-	//desc.pEffect = pReverbAPO;
-	//desc.OutputChannels = 1;
-
-	//XAUDIO2_EFFECT_CHAIN chain;
-	//chain.EffectCount = 1;
-	//chain.pEffectDescriptors = &desc;
-	//m_pSourceVoice->SetEffectChain(&chain);
 	Submit(pWaveData,filename);
 
 	return true;
@@ -500,7 +450,6 @@ void clsXAudio2PlaySound::StopSource()
 		if (IsPlaying() == true) {
 			Stop();
 			xState.BuffersQueued = 0;
-			//isEnd = true;
 		}
 		while (xState.BuffersQueued != 0)
 		{

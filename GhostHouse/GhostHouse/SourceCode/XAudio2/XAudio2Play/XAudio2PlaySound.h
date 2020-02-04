@@ -12,6 +12,8 @@ struct IXAudio2SourceVoice;
 
 class clsXAudio2PlaySound
 {
+private:
+	const float FADE_VOLUME = 0.001f;
 public:
 	// コンストラクタ.
 	clsXAudio2PlaySound();
@@ -73,48 +75,44 @@ public:
 
 	// Reverb(反響エフェクト)の有効フラグを設定します.
 	bool UsingReverb(bool flag);
-
+	// BGMをフェードアウトする関数.
 	bool FadeOutBGM( float value, bool& isEmergencyCall );
-
+	// BGMをフェードインする関数.
 	bool FadeInBGM( float value, bool& isEmergencyCall );
-
+	// 再生しているSoundSourceを停止する関数.
 	void StopSource();
-
+	// SoundSourceを破壊する関数.
 	void DestoroySource();
-
+	// フェードアウトフラグのセッター.
 	void SetFadeOutFlag(bool BGMFadeOutFlag) { m_FadeOutStart = BGMFadeOutFlag; }
-	
+	// フェードアウトフラグのゲッター.
 	bool GetFadeOutFlag() { return m_FadeOutStart; }
-
+	// フェードインフラグのセッター.
 	void SetFadeInFlag(bool BGMFadeInFlag) { m_FadeInStart = BGMFadeInFlag; }
-
+	// フェードインフラグのゲッター.
 	bool GetFadeInFlag() { return m_FadeInStart; }
 
 protected:
-
 	//! 音源データをストリームに流し込みます.
 	//  この関数は外部から呼び出せません.
 	bool Submit(std::shared_ptr<clsXAudio2WaveLoad> pWaveData, const char* filename);
-
 protected:
 
 	//! 変数
-	clsXAudio2WaveLoad*       m_pOriginData;  //  サウンド音源データ
-	IXAudio2SourceVoice*   m_pSourceVoice; //  サウンドを再生するストリーム
-	//std::shared_ptr<clsXAudio2MasterVoice> m_pMaster;
+	clsXAudio2WaveLoad*       m_pOriginData;  //  サウンド音源データ.
+	IXAudio2SourceVoice*   m_pSourceVoice; //  サウンドを再生するストリーム.
+
 	size_t nextFirstSample;
 	size_t submitCount;
-	bool                    m_isLoop;       //  ループフラグ
-	float                   m_maxVolume;    //  最大音量
-	float                   m_maxPitch;     //  最大ピッチ
-	bool					m_bStop;
-	std::vector< BYTE >		m_Primary;
-	std::vector< BYTE >		m_Secondary;
+	bool                    m_isLoop;       //  ループフラグ.
+	float                   m_maxVolume;    //  最大音量.
+	float                   m_maxPitch;     //  最大ピッチ.
+	std::vector< BYTE >		m_Primary;		// プライマリバッファ.
+	std::vector< BYTE >		m_Secondary;	// セカンドバッファ.
 
-	bool					m_FadeOutStart;
-	bool					m_FadeInStart;
+	bool					m_FadeOutStart;	// フェードアウト開始フラグ.
+	bool					m_FadeInStart;	// フェードイン開始フラグ.
 
-	float					m_fDownVolume;
 };
 
 

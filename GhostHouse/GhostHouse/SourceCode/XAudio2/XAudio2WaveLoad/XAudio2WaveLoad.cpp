@@ -1,4 +1,5 @@
 #include "XAudio2WaveLoad.h"
+#include <crtdbg.h>
 #include <stdio.h>
 #include <tchar.h>
 
@@ -10,7 +11,6 @@ clsXAudio2WaveLoad::clsXAudio2WaveLoad()
 	, m_dataChunkSamples(0)
 {
 	ZeroMemory(&m_WaveFormat, sizeof(m_WaveFormat));
-	//memset(m_filename, '\0', sizeof(m_filename));
 }
 
 clsXAudio2WaveLoad::~clsXAudio2WaveLoad()
@@ -22,30 +22,30 @@ bool clsXAudio2WaveLoad::Open(const char* filename)
 {
 	if (m_pFile) return false;
 	std::string Filename = filename;
+	// BGMデータがあるディレクトリパスを入れる.
 	std::string BGMPass = "Data\\Sound\\BGM\\" + Filename;
 	LPSTR CastLPSTR = const_cast<char*>(BGMPass.c_str());
-
+	// CastLPSTRがエラー値ならSEのファイルの名前の可能性があるので、SEのディレクトリパスで検索.
 	if (_tfopen_s(&m_pFile, CastLPSTR, _T("rb")) != 0) {
-		std::string BGMPass = "Data\\Sound\\SE\\" + Filename;
-		LPSTR CastLPSTR = const_cast<char*>(BGMPass.c_str());
+		std::string SEPass = "Data\\Sound\\SE\\" + Filename;
+		LPSTR CastLPSTR = const_cast<char*>(SEPass.c_str());
 		if (_tfopen_s(&m_pFile, CastLPSTR, _T("rb")) != 0) {
+			// データが存在しない.
 			return false;
 		}
 	}
 		
-
-
 	Tmp = filename;
 	return true;
 }
 
 
-// フォーマット情報を取得
+// フォーマット情報を取得.
 bool clsXAudio2WaveLoad::GetWaveFormat(const char* filename)
 {
 	Open(filename);
 
-	// オープン済みか
+	// オープン済みか.
 	if (!m_pFile) return NULL;
 
 	if (!m_hasGotWaveFormat)
@@ -54,10 +54,10 @@ bool clsXAudio2WaveLoad::GetWaveFormat(const char* filename)
 
 		while (1)
 		{
-			// チャンク先頭へ移動
+			// チャンク先頭へ移動.
 			if (fseek(m_pFile, offset, SEEK_SET) != 0) break;
 
-			// チャンクシグネチャを読み込み
+			// チャンクシグネチャを読み込み.
 			char chunkSignature[4] = { 0 };
 			std::size_t readChars = 0;
 			while (readChars < 4)
@@ -67,26 +67,26 @@ bool clsXAudio2WaveLoad::GetWaveFormat(const char* filename)
 				readChars += ret;
 			}
 
-			// チャンクサイズを読み込み
+			// チャンクサイズを読み込み.
 			uint32_t chunkSize = 0;
 			if (fread(&chunkSize, sizeof(uint32_t), 1, m_pFile) == 0) break;
 
-			// fmt チャンクが見つかったらフォーマット情報を読み込み
+			// fmt チャンクが見つかったらフォーマット情報を読み込み.
 			if (strncmp(chunkSignature, "fmt ", 4) == 0)
 			{
 				std::size_t readSize = chunkSize < sizeof(WAVEFORMATEX) ? chunkSize : sizeof(WAVEFORMATEX);
 				if (fread(&m_WaveFormat, readSize, 1, m_pFile) == 0) break;
 
-				// PCM のときは一応 cbSize を 0 にしておく (無視されるらしいけど)
+				// PCM のときは一応 cbSize を 0 にしておく.
 				if (m_WaveFormat.wFormatTag == WAVE_FORMAT_PCM) m_WaveFormat.cbSize = 0;
-				// フォーマット情報取得済み
+				// フォーマット情報取得済み.
 				m_hasGotWaveFormat = true;
 			}
 
-			// data チャンクが見つかったらオフセットとサイズを記憶
+			// data チャンクが見つかったらオフセットとサイズを記憶.
 			if (strncmp(chunkSignature, "data", 4) == 0)
 			{
-				m_firstSampleOffset = offset + 8;	// シグネチャ 4bytes ＋ サイズ 4bytes
+				m_firstSampleOffset = offset + 8;	// シグネチャ 4bytes ＋ サイズ 4bytes.
 				m_dataChunkSize = chunkSize;
 			}
 
@@ -94,64 +94,49 @@ bool clsXAudio2WaveLoad::GetWaveFormat(const char* filename)
 			offset += (static_cast<long>(chunkSize) + 8);
 		}
 
-		if (!m_hasGotWaveFormat) return NULL;	// どっかでエラーが起きてちゃんと拾えなかった
+		if (!m_hasGotWaveFormat) return NULL;	// どっかでエラーが起きてちゃんと拾えなかった.
 
-		// フォーマット情報が取得でき次第 data チャンク内のサンプル数を計算
-		m_dataChunkSamples = m_dataChunkSize / m_WaveFormat.nBlockAlign;	// 必ず割り切れるはず
+		// フォーマット情報が取得でき次第 data チャンク内のサンプル数を計算.
+		m_dataChunkSamples = m_dataChunkSize / m_WaveFormat.nBlockAlign;	// 必ず割り切れるはず.
 	}
 
 	return true;
 }
-// Waveファイルを開く.
-//bool clsXAudio2WaveLoad::Open(const char * filename)
-//{
-//	MMIOINFO mmio_info;
-//	std::string Filename = filename;
-//	std::string BGMPass = "Data\\BGM\\" + Filename;
-//	LPSTR CastLPSTR = const_cast<char*>(BGMPass.c_str());
-//
-//	memset(&mmio_info, 0, sizeof(MMIOINFO));
-//	
-//	if (!(m_handle = mmioOpen(CastLPSTR, &mmio_info, MMIO_READ)))
-//	{
-//		return false;
-//	}
-//	strcpy_s(m_filename, filename);
-//	return true;
-//}
-
-	// サンプル数を取得
+// サンプル数を取得.
 size_t clsXAudio2WaveLoad::GetSamples(const char* filename)
 {
-	// オープン済みか
+	// オープン済みか.
 	if (!m_pFile) return 0;
-	// フォーマット情報を取得していなければここで
+	// フォーマット情報を取得していなければここで.
 	if (!m_hasGotWaveFormat) GetWaveFormat(filename);
 
 	return m_dataChunkSamples;
 }
 
-// 生データ読み込み
+// Rawデータ読み込み.
 size_t clsXAudio2WaveLoad::ReadRaw(const std::size_t start, const std::size_t samples, void * buffer,const char* filename)
 {
-	// バッファアドレスが不正ではないか
-	if (!buffer) return 0;	// 本来なら assert すべき
-	// オープン済みか
+	// バッファアドレスが不正ではないか.
+	if (!buffer) {
+		return 0;
+		_ASSERT_EXPR(false, L"Rawデータのバッファアドレスが不正値です");
+	}
+	// オープン済みか.
 	if (!m_pFile) return 0;
-	// フォーマット情報を取得していなければここで
+	// フォーマット情報を取得していなければここで.
 	if (!m_hasGotWaveFormat)
 	{
 		if (!GetWaveFormat(filename)) return 0;
 	}
-	// 開始位置がオーバーしていないか
+	// 開始位置がオーバーしていないか.
 	if (start >= m_dataChunkSamples) return 0;
 
-	// 実際に読み込むサンプル数を計算
+	// 実際に読み込むサンプル数を計算.
 	std::size_t actualSamples = start + samples > m_dataChunkSamples ? m_dataChunkSamples - start : samples;
 
-	// 読み込み開始位置へ移動
+	// 読み込み開始位置へ移動.
 	if (fseek(m_pFile, m_firstSampleOffset + start * m_WaveFormat.nBlockAlign, SEEK_SET) != 0) return 0;
-	// 読み込み
+	// 読み込み.
 	std::size_t readSamples = 0;
 	while (readSamples < actualSamples)
 	{
@@ -166,29 +151,31 @@ size_t clsXAudio2WaveLoad::ReadRaw(const std::size_t start, const std::size_t sa
 	return readSamples;
 }
 
-// 正規化済みデータ読み込み
+// 正規化済みデータ読み込み.
 size_t clsXAudio2WaveLoad::ReadNormalized(const std::size_t start,
 	const std::size_t samples, float * left, float * right, const char* filename)
 {
-	// 少なくとも 1ch ぶんは指定されているか
-	if (!left) return 0;	// 本来なら assert すべき
-	// オープン済みか
+	// 少なくとも 1ch ぶんは指定されているか.
+	if (!left) {
+		_ASSERT_EXPR(false, L"正規化済みデータ読み込みに失敗しました");
+	}
+	// オープン済みか.
 	if (!m_pFile) return 0;
-	// フォーマット情報を取得していなければここで
+	// フォーマット情報を取得していなければここで.
 	if (!m_hasGotWaveFormat)
 	{
 		if (!GetWaveFormat(filename)) return 0;
 	}
-	// 開始位置がオーバーしていないか
+	// 開始位置がオーバーしていないか.
 	if (start >= m_dataChunkSamples) return 0;
 
-	// 実際に読み込むサンプル数を計算
+	// 実際に読み込むサンプル数を計算.
 	std::size_t actualSamples = start + samples > m_dataChunkSamples ? m_dataChunkSamples - start : samples;
 
 	return 0;
 }
 
-// クローズ
+// クローズ.
 bool clsXAudio2WaveLoad::Close()
 {
 	if (m_pFile)

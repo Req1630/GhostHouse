@@ -12,11 +12,11 @@ public:
 	~clsXAudio2MasterVoice();
 
 	IXAudio2* GetInterface()const;
-
+	// マスターボイス取得.
 	IXAudio2MasteringVoice* GetMasteringVoice()const;
 	static clsXAudio2MasterVoice& GetGlobalSystem();
+	// 開放関数.
 	static void Release();
-	static void CloseCOM();
 protected:
 
 	bool Initialize();

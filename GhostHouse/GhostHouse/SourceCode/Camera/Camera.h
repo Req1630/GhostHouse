@@ -26,6 +26,9 @@ private:
 	const float CAMERA_ROTATION_SPEED = 2.3f;
 	const float MOVE_SPEED = 0.3f;
 	const float CAMERA_UP_DISTANCE = 16.0f;
+	const float EDITCAMERA_DEGREE = 7.0f;
+	const float MAX_GIMMICKCOLPOS_DISTANCE	= 0.3f; // 見えない床のギミック始動当たり判定座標との最大距離.
+	const float MAX_GIMMICKPOS_DISTANCE		= 0.1f;		// 見えない床の中心座標との最大距離.
 public:
 	CCamera();
 	~CCamera();
@@ -56,40 +59,42 @@ public:
 	void EditUpdateCamera();
 
 	void RayColl( shared_ptr<CObjectBase> pObj );
-
+	// ビューマトリックスを返す関数.
 	D3DXMATRIX GetViewMatrix()
 	{
 		return mView;
 	}
-
+	// プロジェクションマトリックスを返す関数.
 	D3DXMATRIX GetProjectionPos()
 	{
 		return mProj;
 	}
-
+	// カメラのラジアンを返す関数.
 	float GetCameraRadian()
 	{
 		return CameraRotationToRadian;
 	}
-
+	// カメラのデグリーに加算,減算する関数.
 	void SetDegree( const float& fdegree )
 	{
 		stCamera.fDegree += fdegree;
 	}
+	// カメラのデグリーを変更する関数.
 	void ChangeDegree( const float& fdegree )
 	{
 		stCamera.fDegree = fdegree;
 	}
-
+	// カメラのギミック上への移動の終了フラグを返す関数.
 	bool GetGimickCameraMoveEnd()
 	{
 		return m_bIsEndMove;
 	}
+	// カメラのギミック上への移動の終了フラグのセッター.
 	void SetGimickCameraMoveEnd( bool MoveEndFlag )
 	{
 		m_bIsEndMove = MoveEndFlag;
 	}
-
+	// カメラのギミック上への移動の現在ステップを返す関数.
 	int GetNowStep()
 	{
 		return m_Step;
@@ -105,6 +110,15 @@ public:
 		Camera.m_CenterX = pos.x;
 		Camera.m_CenterY = pos.y;
 		Camera.m_CenterZ = pos.z;
+	}
+	// オーバーフローチェック.
+	void CheckOverFlow(float CheckNumber) {
+		if (CheckNumber >= 360.0f) {
+			CheckNumber -= 360.0f;
+		}
+		else if (CheckNumber <= -360.0f) {
+			CheckNumber += 360.0f;
+		}
 	}
 private:
 
