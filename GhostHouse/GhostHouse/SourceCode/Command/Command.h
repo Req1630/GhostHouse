@@ -53,12 +53,12 @@ private:
 	void TimeCount();
 
 private:
-	int		m_CommandAdd;
-	int		m_TimeCount;
-	bool	m_isStart;
-	int		m_isTwoPush;
+	int		m_CommandAdd;		// コマンド入力カウント.
+	int		m_TimeCount;		// 入力されてからのタイムカウント.
+	bool	m_isStart;			// スタートしたかどうか.
+	int		m_isTwoPush;		// 二回目の入力チェック.
 
-	bool m_isSuccessCommand;
+	bool m_isSuccessCommand;	// コマンドが成功したかどうか.
 
 };
 

@@ -15,12 +15,18 @@ CCommand::~CCommand()
 {
 }
 
+//----------------------------------.
+// 初期化関数.
+//----------------------------------.
 void CCommand::Initialize()
 {
 	GetInstance()->Init();
 	GetInstance()->m_isSuccessCommand = false;
 }
 
+//----------------------------------.
+// 初期化関数.
+//----------------------------------.
 void CCommand::Init()
 {
 	m_TimeCount		= 0;
@@ -29,6 +35,9 @@ void CCommand::Init()
 	m_isStart		= false;
 }
 
+//----------------------------------.
+// 更新関数.
+//----------------------------------.
 void CCommand::Update()
 {
 	GetInstance()->KeyInput();
@@ -38,6 +47,9 @@ void CCommand::Update()
 	GetInstance()->CheckCommand();
 }
 
+//----------------------------------.
+// コマンド入力関数.
+//----------------------------------.
 void CCommand::KeyInput()
 {
 	auto CheckInit = []( const COMMAND::HashKey& command )
@@ -83,6 +95,9 @@ void CCommand::KeyInput()
 	}
 }
 
+//----------------------------------.
+// コマンド成功確認関数.
+//----------------------------------.
 void CCommand::CheckCommand()
 {
 	if( m_CommandAdd >= COMMAND::Max ){
@@ -90,6 +105,9 @@ void CCommand::CheckCommand()
 	}
 }
 
+//----------------------------------.
+// 上下キーを押した際の処理.
+//----------------------------------.
 void CCommand::PushUpDownKey()
 {
 	m_isStart = true;
@@ -109,6 +127,9 @@ void CCommand::PushUpDownKey()
 	}
 }
 
+//----------------------------------.
+// 左右キーを押した際の処理.
+//----------------------------------.
 void CCommand::PushLeftRightKey( int cnt, int cnt2 )
 {
 	m_isStart = true;
@@ -125,6 +146,9 @@ void CCommand::PushLeftRightKey( int cnt, int cnt2 )
 	}
 }
 
+//----------------------------------.
+// ボタンを押した際のカウント処理.
+//----------------------------------.
 void CCommand::TimeCount()
 {
 	if( m_isStart == false ) return;
