@@ -35,6 +35,9 @@ CSphere::~CSphere()
 	m_pDevice11 = nullptr;
 }
 
+//------------------------.
+// 作成関数.
+//------------------------.
 HRESULT CSphere::Init( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11, const float& fRadius )
 {
 	m_pDevice11 = pDevice11;
@@ -52,6 +55,9 @@ HRESULT CSphere::Init( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11,
 	return S_OK;
 }
 
+//------------------------.
+// シェーダー作成.
+//------------------------.
 HRESULT CSphere::InitShader()
 {
 	ID3DBlob* pCompiledShader = nullptr;
@@ -182,6 +188,9 @@ HRESULT CSphere::InitShader()
 	return S_OK;
 }
 
+//------------------------.
+// スフィア作成.
+//------------------------.
 HRESULT CSphere::InitSphere( const float& fRadius )
 {
 	const int U_MAX = 30;
@@ -261,6 +270,9 @@ HRESULT CSphere::InitSphere( const float& fRadius )
 	return S_OK;
 }
 
+//------------------------.
+// 描画関数.
+//------------------------.
 void CSphere::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj )
 {
 	if( m_pVertexShader == nullptr ) return;
@@ -340,6 +352,9 @@ void CSphere::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj )
 	SetBlend( false );
 }
 
+//------------------------.
+// ブレンド作成.
+//------------------------.
 HRESULT CSphere::InitBlend()
 {
 	//ｱﾙﾌｧﾌﾞﾚﾝﾄﾞ用ﾌﾞﾚﾝﾄﾞｽﾃｰﾄ構造体.
@@ -391,7 +406,9 @@ HRESULT CSphere::InitBlend()
 	return S_OK;
 }
 
-//透過設定の切り替え.
+//------------------------.
+// ブレンドの有効無効.
+//------------------------.
 void CSphere::SetBlend( bool EnableAlpha )
 {
 	//ﾌﾞﾚﾝﾄﾞｽﾃｰﾄの設定.

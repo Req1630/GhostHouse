@@ -174,7 +174,9 @@ HRESULT CRay::InitShader()
 	return S_OK;
 }
 
+//---------------------.
 // レイ初期化.
+//---------------------.
 HRESULT CRay::InitModel()
 {
 	// レイのバーテックスバッファ作成.
@@ -199,7 +201,9 @@ HRESULT CRay::InitModel()
 	return S_OK;
 }
 
+//---------------------.
 // 描画.
+//---------------------.
 void CRay::Render(
 	D3DXMATRIX& mView, D3DXMATRIX& mProj )
 {

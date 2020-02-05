@@ -9,8 +9,9 @@ public:
 	CSphere();
 	~CSphere();
 
+	// 作成関数.
 	HRESULT Init( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11, const float& fRadius );
-
+	// 描画関数.
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj );
 
 	// 座標セット関数.
@@ -23,8 +24,9 @@ public:
 	void SetRadius( const float & fRad ) { m_fScale = fRad; }
 
 private:
-	//ｼｪｰﾀﾞ作成.
+	// シェーダー作成.
 	HRESULT InitShader();
+	// スフィア作成.
 	HRESULT InitSphere( const float& fRadius );
 	// ブレンド作成.
 	HRESULT InitBlend();

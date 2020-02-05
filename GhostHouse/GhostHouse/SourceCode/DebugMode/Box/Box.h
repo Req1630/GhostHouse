@@ -9,11 +9,13 @@ public:
 	CBox();
 	~CBox();
 
+	// 初期化関数.
 	HRESULT Init( 
 		ID3D11Device* pDevice11, 
 		ID3D11DeviceContext* pContext11, 
 		const D3DXVECTOR3& vMaxPoint,
 		const D3DXVECTOR3& vMinPoint );
+	// 描画関数.
 	void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj );
 
 	// 座標セット関数.
@@ -22,8 +24,9 @@ public:
 	void SetRotationYaw( const float& fYaw ){ m_fYaw = fYaw; }
 
 private:
-	//ｼｪｰﾀﾞ作成.
+	// シェーダー作成.
 	HRESULT InitShader();
+	// キューブ,ボックスの作成.
 	HRESULT InitCube( const D3DXVECTOR3& vMaxPoint, const D3DXVECTOR3& vMinPoint );
 	// ブレンド作成.
 	HRESULT InitBlend();

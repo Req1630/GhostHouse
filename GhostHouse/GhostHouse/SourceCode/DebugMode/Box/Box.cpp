@@ -34,6 +34,7 @@ CBox::~CBox()
 	m_pDevice11		= nullptr;
 }
 
+// 初期化関数.
 HRESULT CBox::Init(
 	ID3D11Device* pDevice11,
 	ID3D11DeviceContext* pContext11,
@@ -55,6 +56,9 @@ HRESULT CBox::Init(
 	return S_OK;
 }
 
+//----------------------.
+// シェーダー作成.
+//----------------------.
 HRESULT CBox::InitShader()
 {
 	ID3DBlob* pCompiledShader = nullptr;
@@ -185,6 +189,9 @@ HRESULT CBox::InitShader()
 	return S_OK;
 }
 
+//----------------------------.
+// キューブ,ボックスの作成.
+//----------------------------.
 HRESULT CBox::InitCube( const D3DXVECTOR3& vMaxPoint, const D3DXVECTOR3& vMinPoint )
 {
 	//板ﾎﾟﾘ(四角形)の頂点を作成.
@@ -276,6 +283,9 @@ HRESULT CBox::InitCube( const D3DXVECTOR3& vMaxPoint, const D3DXVECTOR3& vMinPoi
 	return S_OK;
 }
 
+//-------------------.
+// 描画関数.
+//-------------------.
 void CBox::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj )
 {
 	if( m_pVertexShader == nullptr ) return;
