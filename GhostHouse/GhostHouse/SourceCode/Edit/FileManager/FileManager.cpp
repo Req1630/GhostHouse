@@ -18,6 +18,9 @@ CFileManager::~CFileManager()
 {
 }
 
+//-------------------------------.
+// Imguiの描画関数.
+//-------------------------------.
 void CFileManager::ImGuiRender()
 {
 	GetStageNameList( m_StageNameList );
@@ -70,6 +73,9 @@ void CFileManager::ImGuiRender()
 	KeyBoardRender();
 }
 
+//-------------------------------.
+// 仮想キーボードの表示.
+//-------------------------------.
 void CFileManager::KeyBoardRender()
 {
 	if( m_isFileOperations == false ) return;
@@ -105,6 +111,7 @@ void CFileManager::KeyBoardRender()
 		if( ImGui::Button(key, vSize) ) name += key;
 	};
 
+	// 一段目の表示.
 	keyInputNumber("1");ImGui::SameLine();
 	keyInputNumber("2");ImGui::SameLine();
 	keyInputNumber("3");ImGui::SameLine();
@@ -121,6 +128,7 @@ void CFileManager::KeyBoardRender()
 		}
 	}
 
+	// 二段目の表示.
 	ImGui::Text(" ");ImGui::SameLine();
 	keyInput("Q");ImGui::SameLine();
 	keyInput("W");ImGui::SameLine();
@@ -133,6 +141,7 @@ void CFileManager::KeyBoardRender()
 	keyInput("O");ImGui::SameLine();
 	keyInput("P");
 
+	// 三段目の表示.
 	ImGui::Text(" ");ImGui::SameLine();
 	ImGui::Text(" ");ImGui::SameLine();
 	keyInput("A");ImGui::SameLine();
@@ -151,6 +160,7 @@ void CFileManager::KeyBoardRender()
 		}
 	}
 
+	// 四段目の表示.
 	if( ImGui::Button("Shift",ImVec2( 50.0f, 35.0f )) ) isShiftKey = !isShiftKey; ImGui::SameLine();
 	keyInput("Z");ImGui::SameLine();
 	keyInput("X");ImGui::SameLine();
@@ -164,6 +174,9 @@ void CFileManager::KeyBoardRender()
 	ImGui::End();
 }
 
+//-------------------------------.
+// マップの保存.
+//-------------------------------.
 HRESULT CFileManager::Save( const std::vector<edit::RENDER_OBJRCT>& objInfo )
 {
 	std::string directory_path = edit::FILE_PATH + m_SaveFileName;
@@ -198,6 +211,9 @@ HRESULT CFileManager::Save( const std::vector<edit::RENDER_OBJRCT>& objInfo )
 	return S_OK;
 }
 
+//-------------------------------.
+// マップの読み込み.
+//-------------------------------.
 HRESULT CFileManager::Load( std::vector<edit::RENDER_OBJRCT>& objInfo )
 {
 	objInfo.clear();
@@ -227,6 +243,9 @@ HRESULT CFileManager::Load( std::vector<edit::RENDER_OBJRCT>& objInfo )
 	return S_OK;
 }
 
+//-------------------------------.
+// ステージ名の取得関数.
+//-------------------------------.
 HRESULT CFileManager::GetStageNameList( std::vector<std::string>& stageNameList )
 {
 	stageNameList.clear();
@@ -245,6 +264,9 @@ HRESULT CFileManager::GetStageNameList( std::vector<std::string>& stageNameList 
 	return S_OK;
 }
 
+//-------------------------------.
+// ファイルの行の各値の取得.
+//-------------------------------.
 void CFileManager::FieldRead( edit::RENDER_OBJRCT& tmpObj, const std::string& field, const int& count )
 {
 	switch( count ){

@@ -12,14 +12,16 @@ public:
 	CSelectMenu();
 	~CSelectMenu();
 
+	// 描画関数.
 	void Render();
 
 	// オブジェクト名の取得.
 	std::string GetObjectName() const { return m_SelectOjectName; }
 	// メニューの表示に戻る.
 	void BackMenu(){ m_isChoice = true; }
-
+	// 仮ステージの設定関数.
 	void SetTmpStage( std::vector<edit::RENDER_OBJRCT>* pobj );
+	// 現在オブジェクト選択状態か.
 	bool IsChoice() const { return m_isChoice; }
 
 private:
@@ -31,7 +33,7 @@ private:
 	bool ObjectListRender( const std::string& objectListName, const int& index );
 	// オブジェクトの選択.
 	bool SelectObject( const std::string& objectName );
-
+	// オブジェクト名のリストを取得.
 	void GetObjectListName();
 
 private:

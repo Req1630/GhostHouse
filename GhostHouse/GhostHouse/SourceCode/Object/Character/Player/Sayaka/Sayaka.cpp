@@ -219,7 +219,6 @@ void CSayaka::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	}
 }
 #endif
-	m_pCollLight->Render( mView, mProj, Light, stCamera );
 	if( m_isUpdate == false ){
 		m_pCamera->SetDegree( 0.1f );
 		stCamera.Pos = m_pCamera->MoveCameraPos( stCamera.vLook );

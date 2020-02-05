@@ -57,15 +57,13 @@ private:
 
 
 private:
-	std::vector<edit::RENDER_OBJRCT>	m_pTmpStage;
+	std::vector<edit::RENDER_OBJRCT>	m_pTmpStage;	// 仮ステージ.
 
-	unique_ptr<CObjectArrangement>		m_pObjArrangement;
-
-	unique_ptr<CSelectMenu>				m_pSelectMenu;
-
-	unique_ptr<CEditImGui>				m_pEditImGui;
-	shared_ptr<CPlayer>					m_pPlayer;
-	shared_ptr<CGround>					m_pGround;
+	unique_ptr<CObjectArrangement>	m_pObjArrangement;
+	unique_ptr<CSelectMenu>			m_pSelectMenu;
+	unique_ptr<CEditImGui>			m_pEditImGui;
+	shared_ptr<CPlayer>				m_pPlayer;
+	shared_ptr<CGround>				m_pGround;
 
 	bool m_isEditEnd;
 	edit::RENDER_OBJRCT m_TmpObj;

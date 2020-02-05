@@ -24,6 +24,9 @@ CPlayer::CPlayer()
 CPlayer::~CPlayer()
 {}
 
+//-------------------------.
+// 更新関数.
+//-------------------------.
 void CPlayer::Update( shared_ptr<CObjectBase> pObj )
 {
 	if( m_pStaticMesh == nullptr ) return;
@@ -31,6 +34,9 @@ void CPlayer::Update( shared_ptr<CObjectBase> pObj )
 	m_pCamera->EditUpdateCamera();
 }
 
+//-------------------------.
+// 描画関数.
+//-------------------------.
 void CPlayer::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera )
 {
 	m_mView = mView;
@@ -46,6 +52,9 @@ void CPlayer::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCA
 	m_pStaticMesh->Render( mView, mProj, stLight, stCamera );
 }
 
+//-------------------------.
+// 読み込み関数.
+//-------------------------.
 void CPlayer::Load( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 )
 {
 	auto MyMeshLoad = [=]()
@@ -57,6 +66,9 @@ void CPlayer::Load( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 )
 	MyMeshLoad();
 }
 
+//-------------------------.
+// スティックの傾き取得.
+//-------------------------.
 bool CPlayer::StickInclination( float divideValue )
 {
 	m_isMove = false;
@@ -76,6 +88,9 @@ bool CPlayer::StickInclination( float divideValue )
 	return false;
 }
 
+//-------------------------.
+// 操作関数.
+//-------------------------.
 void CPlayer::Control()
 {
 	float movespd = 1.0f;
@@ -129,6 +144,9 @@ void CPlayer::Control()
 	}
 }
 
+//-------------------------.
+// レイでの当たり判定.
+//-------------------------.
 void CPlayer::RayHits( shared_ptr<CObjectBase> pObj )
 {
 	float fDistance;
@@ -151,6 +169,9 @@ void CPlayer::RayHits( shared_ptr<CObjectBase> pObj )
 	}
 }
 
+//-------------------------.
+// メッシュ取得関数.
+//-------------------------.
 LPD3DXMESH CPlayer::GetMeshData()
 {
 	if( m_pStaticMesh == nullptr ) return nullptr;

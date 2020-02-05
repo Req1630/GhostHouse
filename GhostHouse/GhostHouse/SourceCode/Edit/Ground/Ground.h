@@ -15,11 +15,13 @@ public:
 	virtual void Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera ) override;
 	// 読み込み関数.
 	virtual void Load( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 ) override;
+	// 当たり判定関数.
 	virtual void Collision( shared_ptr<CObjectBase> pObj ) override
 	{}
+	// メッシュ取得関数.
 	virtual LPD3DXMESH GetMeshData() override;
 private:
-	shared_ptr<CDX9Mesh>	m_pStaticMesh;
+	shared_ptr<CDX9Mesh>	m_pStaticMesh;	// メッシュクラス.
 };
 
 #endif	// #ifndef GROUND_H.

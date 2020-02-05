@@ -17,6 +17,9 @@ CEditImGui::~CEditImGui()
 {
 }
 
+//------------------------------------.
+// 描画関数.
+//------------------------------------.
 void CEditImGui::Render( bool& isEditEnd )
 {
 	ManipulationDescriptionRender( isEditEnd );
@@ -27,6 +30,9 @@ void CEditImGui::Render( bool& isEditEnd )
 	}
 }
 
+//------------------------------------.
+// 操作説明描画関数.
+//------------------------------------.
 void CEditImGui::ManipulationDescriptionRender( bool& isEditEnd )
 {
 	ImGui::SetNextWindowSize( ImVec2( IMGUI_WND_W-100.0f, IMGUI_WND_H-60.0f ), ImGuiCond_::ImGuiCond_Once );
@@ -75,6 +81,9 @@ void CEditImGui::ManipulationDescriptionRender( bool& isEditEnd )
 	ImGui::End();
 }
 
+//------------------------------------.
+// エディット終了ウィンドウ描画関数.
+//------------------------------------.
 void CEditImGui::EditEndPopRender( bool& isEditEnd )
 {
 	if( m_isEndPopRender == false ) return;

@@ -140,7 +140,7 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 				stCamera.Pos += AxisZProc( stCamera.vRot.y ) * (0.1f);
 			} else {
 				// 距離は十分なのでステップを進める.
-				m+Step++;
+				m_Step++;
 			}
 			CameraRotationToRadian = m_fInvGimmickRadian;
 			// カメラの座標更新.
@@ -206,7 +206,7 @@ D3DXVECTOR3 CCamera::EditMoveCameraPos( const D3DXVECTOR3& vCenPos )
 	Camera.m_CenterZ = vCenPos.z;
 
 	//オーバーフロー対策.
-	CheckOverFlow(Camera.fDegree);
+	CheckOverFlow(Camera.m_Degree);
 	CheckOverFlow(Camera.m_Degree_y);
 
 	//if( Camera.m_Degree >= 360.0f ){

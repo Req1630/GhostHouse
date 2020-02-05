@@ -3,6 +3,7 @@
 #include "..\..\DebugMode\DebugText\DebugText.h"
 #include "..\..\XInput\XInput.h"
 
+// XVŠÖ”.
 void CEachItem::Update()
 {
 	if( ( GetAsyncKeyState( 'W' ) & 0x0001 ) || 
@@ -17,6 +18,7 @@ void CEachItem::Update()
 	}
 }
 
+// •`‰æŠÖ”.
 void CEachItem::Render()
 {
 	EachItemNameListRender();

@@ -11,9 +11,15 @@ CGround::CGround()
 CGround::~CGround()
 {}
 
+//--------------------.
+// 更新関数.
+//--------------------.
 void CGround::Update( shared_ptr<CObjectBase> pObj )
 {}
 
+//--------------------.
+// 描画関数.
+//--------------------.
 void CGround::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCAMERA& stCamera )
 {
 	if( m_pStaticMesh == nullptr ) return;
@@ -24,12 +30,18 @@ void CGround::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj, Light& stLight, stCA
 	m_pStaticMesh->SetAlpha( false );
 }
 
+//--------------------.
+// 読み込み関数.
+//--------------------.
 void CGround::Load( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 )
 {
 	if( m_pStaticMesh != nullptr ) return;
 	m_pStaticMesh = CEditModelResource::GetMesh("ground");
 }
 
+//--------------------.
+// メッシュ取得関数.
+//--------------------.
 LPD3DXMESH CGround::GetMeshData()
 {
 	if( m_pStaticMesh == nullptr ) return nullptr;

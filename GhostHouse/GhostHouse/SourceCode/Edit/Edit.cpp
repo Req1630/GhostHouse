@@ -27,12 +27,18 @@ CEdit::CEdit()
 CEdit::~CEdit()
 {}
 
+//------------------------------.
+// 各オブジェクトの読み込み.
+//------------------------------.
 void CEdit::Load( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 )
 {
 	m_pPlayer->Load( pDevice11, pContext11 );
 	m_pGround->Load( pDevice11, pContext11 );
 }
 
+//------------------------------.
+// 更新処理.
+//------------------------------.
 void CEdit::Updete()
 {
 	Control();
@@ -40,6 +46,9 @@ void CEdit::Updete()
 	ObjArrangementUpdate();
 }
 
+//------------------------------.
+// 描画処理.
+//------------------------------.
 void CEdit::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	Light& stLight, stCAMERA& stCamera )
 {
@@ -60,6 +69,9 @@ void CEdit::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
 	ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 }
 
+//------------------------------.
+// 操作処理.
+//------------------------------.
 void CEdit::Control()
 {
 	// オブジェクトを置く.
@@ -80,6 +92,9 @@ void CEdit::Control()
 	}
 }
 
+//------------------------------.
+// 仮ステージの描画.
+//------------------------------.
 void CEdit::TmpStageRender(
 	D3DXMATRIX& mView,
 	D3DXMATRIX& mProj,
@@ -99,6 +114,9 @@ void CEdit::TmpStageRender(
 	}
 }
 
+//------------------------------.
+// 選択オブジェクトの更新.
+//------------------------------.
 void CEdit::ObjArrangementUpdate()
 {
 	if( m_pSelectMenu->IsChoice() == true ) return;
@@ -110,6 +128,9 @@ void CEdit::ObjArrangementUpdate()
 	m_pObjArrangement->Update();
 }
 
+//------------------------------.
+// 選択オブジェクトの描画.
+//------------------------------.
 void CEdit::ObjArrangementRender( 
 	D3DXMATRIX& mView, 
 	D3DXMATRIX& mProj,
@@ -120,6 +141,9 @@ void CEdit::ObjArrangementRender(
 	m_pObjArrangement->Render( mView, mProj, stLight, stCamera );
 }
 
+//------------------------------.
+// オブジェクトを置く処理.
+//------------------------------.
 void CEdit::PutObject()
 {
 	if( m_pSelectMenu->GetObjectName() == "" ) return;
@@ -128,6 +152,9 @@ void CEdit::PutObject()
 	m_TmpObj = edit::RENDER_OBJRCT();
 }
 
+//------------------------------.
+// オブジェクトを消す処理.
+//------------------------------.
 void CEdit::DeleteObject()
 {
 	for( size_t i = 0; i < m_pTmpStage.size(); i++ ){

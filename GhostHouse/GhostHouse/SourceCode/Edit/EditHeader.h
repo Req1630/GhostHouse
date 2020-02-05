@@ -31,6 +31,7 @@ namespace edit
 		{}
 	};
 
+	// 描画用のオブジェクト構造体.
 	struct RENDER_OBJRCT : public edit::OBJECT_INFO
 	{
 		shared_ptr<CDX9Mesh> pMesh;

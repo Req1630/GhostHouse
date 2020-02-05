@@ -13,9 +13,11 @@ public:
 	~CEachItem()
 	{}
 
+	// 更新関数.
 	void Update();
+	// 描画関数.
 	void Render();
-
+	// 現在のアイテム取得関数.
 	edit::SelectItem GetNowSelectitem() const { return m_NowSelectItem-1; };
 
 private:

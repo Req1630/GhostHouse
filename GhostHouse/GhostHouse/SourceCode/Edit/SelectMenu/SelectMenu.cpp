@@ -22,11 +22,17 @@ CSelectMenu::~CSelectMenu()
 {
 }
 
+//----------------------------------.
+// 仮ステージの設定関数.
+//----------------------------------.
 void CSelectMenu::SetTmpStage( std::vector<edit::RENDER_OBJRCT>* pobj )
 {
 	m_pFileManager->SetTmpStage( pobj );
 }
 
+//----------------------------------.
+// 描画関数.
+//----------------------------------.
 void CSelectMenu::Render()
 {
 	GetObjectListName();
@@ -49,6 +55,9 @@ void CSelectMenu::Render()
 	}
 }
 
+//----------------------------------.
+// ウィンドウの設定.
+//----------------------------------.
 void CSelectMenu::SettingWindow()
 {
 	ImGui::SetNextWindowSize( ImVec2( 400, 500 ), ImGuiCond_::ImGuiCond_Once );
@@ -65,6 +74,9 @@ void CSelectMenu::SettingWindow()
 	ImGui::Begin( "Select Object", &isOpen, flag );
 }
 
+//----------------------------------.
+// オブジェクトのタブの表示.
+//----------------------------------.
 void CSelectMenu::ObjectTabRender()
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -83,6 +95,9 @@ void CSelectMenu::ObjectTabRender()
 	ImGui::EndTabBar();
 }
 
+//----------------------------------.
+// オブジェクトリストの表示.
+//----------------------------------.
 bool CSelectMenu::ObjectListRender( const std::string& objectListName, const int& index )
 {
 	if( ImGui::BeginTabItem( objectListName.c_str() ) == false ) return false;
@@ -102,6 +117,9 @@ bool CSelectMenu::ObjectListRender( const std::string& objectListName, const int
 	return false;
 }
 
+//----------------------------------.
+// オブジェクトの選択.
+//----------------------------------.
 bool CSelectMenu::SelectObject( const std::string& objectName )
 {
 	if( ImGui::Button( objectName.c_str() ) ){
@@ -112,6 +130,9 @@ bool CSelectMenu::SelectObject( const std::string& objectName )
 	return false;
 }
 
+//----------------------------------.
+// オブジェクト名のリストを取得.
+//----------------------------------.
 void CSelectMenu::GetObjectListName()
 {
 	m_GhostNameList			= CEditModelResource::GetGhostNameList();
