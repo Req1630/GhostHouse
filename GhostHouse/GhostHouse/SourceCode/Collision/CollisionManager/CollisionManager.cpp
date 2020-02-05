@@ -18,20 +18,11 @@ CCollisionManager::~CCollisionManager()
 {
 }
 
+//-----------------.
+// ŠeŽí‰Šú‰»ŠÖ”.
+//-----------------.
 void CCollisionManager::Init( LPD3DXMESH pMesh )
 {
 	m_pCollBox->InitBBox( pMesh );
 	m_pCollSphere->InitSphere( pMesh );
-}
-
-void CCollisionManager::InitDebug( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 )
-{
-	m_pCollBox->InitDebug( pDevice11, pContext11 );
-	m_pCollSphere->InitDebug( pDevice11, pContext11 );
-}
-
-void CCollisionManager::DebugRender( D3DXMATRIX& mView, D3DXMATRIX& mProj )
-{
-	m_pCollBox->DebugRender( mView, mProj );
-	m_pCollSphere->DebugRender( mView, mProj );
 }

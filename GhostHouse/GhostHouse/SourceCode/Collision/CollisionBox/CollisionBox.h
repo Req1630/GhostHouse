@@ -17,11 +17,7 @@ public:
 	
 	// ボックス初期化.
 	HRESULT InitBBox( LPD3DXMESH pMesh );
-	// デバッグ用ボックス初期化.
-	void	InitDebug( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 );
-	// デバッグ用描画.
-	void	DebugRender( D3DXMATRIX& mView, D3DXMATRIX& mProj );
-
+	// ボックスのサイズを変更する.
 	void BoxScaleSet( const float& size )
 	{
 		m_vPositionMax = m_vPositionMax * size;

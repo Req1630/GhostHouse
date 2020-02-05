@@ -17,10 +17,6 @@ public:
 
 	// スフィア初期化.
 	HRESULT InitSphere( LPD3DXMESH pMesh );
-	// デバッグ用ボックス初期化.
-	void	InitDebug( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 );
-	// デバッグ用描画.
-	void	DebugRender( D3DXMATRIX& mView, D3DXMATRIX& mProj );
 
 	// 各情報取得関数.
 	D3DXVECTOR3	GetPosition()	{ return *m_pvPosition; }
@@ -33,8 +29,8 @@ private:
 	CCollisionSphere();
 
 private:
-	D3DXVECTOR3*	m_pvPosition;
-	float			m_fRadius;
+	D3DXVECTOR3*	m_pvPosition;	// 座標.
+	float			m_fRadius;		// 半径.
 };
 
 #endif	// #ifndef COLLISION_SPHERE_H.

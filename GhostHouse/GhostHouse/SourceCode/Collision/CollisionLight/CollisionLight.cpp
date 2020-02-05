@@ -1,37 +1,25 @@
 #include "CollisionLight.h"
 #include "..\..\Resource\MeshResource\MeshResource.h"
 
-D3DXVECTOR3 CCollisionLight::D3DXVector3Destance( D3DXVECTOR3 vec, D3DXVECTOR3 vec2 )
-{
-	D3DXVECTOR3 c;
-
-	c.y = vec.y - vec2.y;
-	c.z = vec.z - vec2.z;
-	c.x = vec.x - vec2.x;
-
-	return c;
-}
-float CCollisionLight::D3DXVector3Size( D3DXVECTOR3 vec )
-{
-	return sqrtf( powf( vec.x, 2 ) + powf( vec.y, 2 ) + powf( vec.z, 2 ) );
-}
-
+//--------------------------.
+// ライト判定処理.
+//--------------------------.
 bool CCollisionLight::isLightHit( shared_ptr<CObjectBase> pObj, D3DXVECTOR3 vMyPos, D3DXVECTOR3 fRot_y )
 {
 	float r = LIGHT_RADIUS;						// ライトの半径.
 
-	SayakaPos = vMyPos;
-	SayakaPos.y += 1.0f;
-	lightPos = SayakaPos;		// ライトの先の座標用.
+	D3DXVECTOR3 sayakaPos = vMyPos;
+	sayakaPos.y += 1.0f;
+	D3DXVECTOR3 lightPos = sayakaPos;		// ライトの先の座標用.
 	D3DXMATRIX mAttackRot;	// 回転行列.
 
 	// ライトの座標に回転座標を合成する.
 	lightPos += fRot_y * LIGHT_DISTANCE;
 
-	D3DXVECTOR3 vTarPosToMyPos		= D3DXVector3Destance( pObj->GetPosition(), SayakaPos );
-	D3DXVECTOR3 vLightPosToMyPos	= D3DXVector3Destance( lightPos, SayakaPos );
+	D3DXVECTOR3 vTarPosToMyPos		= D3DXVector3Destance( pObj->GetPosition(), sayakaPos );
+	D3DXVECTOR3 vLightPosToMyPos	= D3DXVector3Destance( lightPos, sayakaPos );
 
-	float h = fabsf( D3DXVector3Size( SayakaPos ) - D3DXVector3Size( lightPos ) );
+	float h = fabsf( D3DXVector3Size( sayakaPos ) - D3DXVector3Size( lightPos ) );
 	float vDot = D3DXVec3Dot( &vTarPosToMyPos, &vLightPosToMyPos );
 
 	D3DXVECTOR3 vCloss;
@@ -45,14 +33,24 @@ bool CCollisionLight::isLightHit( shared_ptr<CObjectBase> pObj, D3DXVECTOR3 vMyP
 	
 }
 
-void CCollisionLight::Render( D3DXMATRIX& mView, D3DXMATRIX& mProj,
-	Light& Light, stCAMERA& stCamera )
+//--------------------------.
+// 二つの距離を計算.
+//--------------------------.
+D3DXVECTOR3 CCollisionLight::D3DXVector3Destance( D3DXVECTOR3 vec, D3DXVECTOR3 vec2 )
 {
-	//if( mesh == nullptr ){
-	//	mesh = CMeshResorce::GetStatic("Key"); 
-	//	return;
-	//}
-	//mesh->SetPosition( lightPos );
-	//mesh->SetScale( 0.04f );
-	//mesh->Render( mView, mProj, Light, stCamera );
+	D3DXVECTOR3 c;
+
+	c.y = vec.y - vec2.y;
+	c.z = vec.z - vec2.z;
+	c.x = vec.x - vec2.x;
+
+	return c;
+}
+
+//--------------------------.
+// ベクターのサイズを取得.
+//--------------------------.
+float CCollisionLight::D3DXVector3Size( D3DXVECTOR3 vec )
+{
+	return sqrtf( powf( vec.x, 2 ) + powf( vec.y, 2 ) + powf( vec.z, 2 ) );
 }

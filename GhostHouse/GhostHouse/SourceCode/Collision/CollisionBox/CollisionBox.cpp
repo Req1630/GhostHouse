@@ -3,6 +3,7 @@
 
 
 CCollisionBox::CCollisionBox()
+	: m_pvPosition	( nullptr )
 {
 }
 
@@ -16,6 +17,9 @@ CCollisionBox::~CCollisionBox()
 	m_pvPosition	= nullptr;
 }
 
+//------------------------------.
+// 判定処理.
+//------------------------------.
 bool CCollisionBox::isCollision( CCollisionBox* collBox )
 {
 	// 攻撃側に2つの頂点を用意し初期化する.
@@ -38,7 +42,9 @@ bool CCollisionBox::isCollision( CCollisionBox* collBox )
 	return false;
 }
 
+//------------------------------.
 // バウンディングボックス作成.
+//------------------------------.
 HRESULT CCollisionBox::InitBBox( LPD3DXMESH pMesh )
 {
 	LPDIRECT3DVERTEXBUFFER9 pVB = nullptr;
@@ -74,13 +80,4 @@ HRESULT CCollisionBox::InitBBox( LPD3DXMESH pMesh )
 	m_vLength.z = ( Max.z - Min.z ) / 2.0f;
 
 	return S_OK;
-}
-
-void CCollisionBox::InitDebug( ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11 )
-{
-}
-
-// デバッグ用描画.
-void CCollisionBox::DebugRender( D3DXMATRIX& mView, D3DXMATRIX& mProj )
-{
 }
