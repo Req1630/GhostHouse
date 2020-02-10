@@ -36,9 +36,6 @@ void CPitfallLeft::Render( D3DXMATRIX & mView, D3DXMATRIX & mProj, Light& stLigh
 	m_pStaticMesh->SetBlend( false );
 
 
-#ifdef _DEBUG
-	m_pCollision->DebugRender( mView, mProj );
-#endif	// #ifndef _DEBUG.
 }
 
 void CPitfallLeft::Collision( shared_ptr<CObjectBase> pObj )
@@ -53,15 +50,6 @@ void CPitfallLeft::Load( ID3D11Device * pDevice11, ID3D11DeviceContext * pContex
 			m_pCollision->Init( m_pStaticMesh->GetMesh() );
 		}
 	}
-#ifdef _DEBUG
-	if( m_pStaticMesh == nullptr )	return;
-
-	static bool onLoop = false;
-	if( onLoop == false ){
-		m_pCollision->InitDebug( pDevice11, pContext11 );
-		onLoop = true;
-	}
-#endif	// #ifndef _DEBUG.
 }
 
 
