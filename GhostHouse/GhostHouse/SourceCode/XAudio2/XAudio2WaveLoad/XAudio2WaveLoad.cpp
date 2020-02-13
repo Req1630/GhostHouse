@@ -24,17 +24,20 @@ bool clsXAudio2WaveLoad::Open(const char* filename)
 	std::string Filename = filename;
 	// BGMデータがあるディレクトリパスを入れる.
 	std::string BGMPass = "Data\\Sound\\BGM\\" + Filename;
+	BGMPass += ".wav";
 	LPSTR CastLPSTR = const_cast<char*>(BGMPass.c_str());
+	
 	// CastLPSTRがエラー値ならSEのファイルの名前の可能性があるので、SEのディレクトリパスで検索.
 	if (_tfopen_s(&m_pFile, CastLPSTR, _T("rb")) != 0) {
 		std::string SEPass = "Data\\Sound\\SE\\" + Filename;
+		SEPass += ".wav";
 		LPSTR CastLPSTR = const_cast<char*>(SEPass.c_str());
 		if (_tfopen_s(&m_pFile, CastLPSTR, _T("rb")) != 0) {
 			// データが存在しない.
 			return false;
 		}
 	}
-		
+
 	Tmp = filename;
 	return true;
 }
@@ -114,7 +117,7 @@ size_t clsXAudio2WaveLoad::GetSamples(const char* filename)
 }
 
 // Rawデータ読み込み.
-size_t clsXAudio2WaveLoad::ReadRaw(const std::size_t start, const std::size_t samples, void * buffer,const char* filename)
+size_t clsXAudio2WaveLoad::ReadRaw(const std::size_t start, const std::size_t samples, void * buffer, const char* filename)
 {
 	// バッファアドレスが不正ではないか.
 	if (!buffer) {

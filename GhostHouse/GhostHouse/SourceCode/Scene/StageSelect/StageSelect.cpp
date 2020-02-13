@@ -12,11 +12,11 @@ CStageSelect::CStageSelect( shared_ptr<CSceneManager> &sceneManager )
 	, ThreadExitCode	( false )
 	, m_bThreadRelease	( false )
 {
-	CSoundManager::StopSEByName("OK");
+	CSoundManager::StopSE("OK");
 	CFadeUI::Init();
 	auto st = [&]()
 	{
-		CSoundManager::PlayBGMByName( BGM_NAME, m_isEnd, true );
+		CSoundManager::PlayBGM( BGM_NAME, m_isEnd, true );
 		m_isEnd = true;
 	};
 	BGMThread = std::thread( st );
@@ -59,7 +59,7 @@ void CStageSelect::Update()
 		}
 
 		if (CSoundManager::GetBGMVolme(BGM_NAME) != 1.0f && m_isNextScene == false) {
-			CSoundManager::FadeInBGMByName(BGM_NAME);
+			CSoundManager::FadeInBGM(BGM_NAME);
 		}
 	}
 	if( NextScene() == true ) return;
@@ -79,7 +79,7 @@ void CStageSelect::Update()
 	if(( CXInput::IsPress( XINPUT_GAMEPAD_B )) ||
 		( GetAsyncKeyState( VK_RETURN ) & 0x0001 )){
 		CPlaySEThread::SetSEName( "OK" );
-		CSoundManager::FadeOutBGMByName( BGM_NAME );
+		CSoundManager::FadeOutBGM( BGM_NAME );
 		CFadeUI::FadeOUTStart();
 		m_isNextScene = true;
 	}

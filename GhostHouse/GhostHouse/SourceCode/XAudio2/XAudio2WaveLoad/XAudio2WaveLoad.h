@@ -43,7 +43,4 @@ private:
 	size_t m_dataChunkSamples;
 };
 
-
-
-
 #endif //#ifndef C_XAUDIO2_WAVELOAD_H

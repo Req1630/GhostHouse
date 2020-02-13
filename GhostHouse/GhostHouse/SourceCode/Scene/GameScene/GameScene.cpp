@@ -23,14 +23,14 @@ CGameScene::CGameScene( shared_ptr<CSceneManager> &sceneManager )
 	, m_bThreadRelease	( false )
 	, m_TextArrayNum	( 0 )
 {
-	CSoundManager::StopSEByName("OK");
+	CSoundManager::StopSE("OK");
 	if( CSpriteResource::GetSprite( "Fade" ) == nullptr ) return;
 	CSpriteResource::GetSprite( "Fade" )->SetAlpha( 0.0f );
 	CFadeUI::Init( false );
 
 	auto st = [&]()
 	{
-		CSoundManager::PlayBGMByName( MAIN_BGM_NAME, m_isEnd, true );
+		CSoundManager::PlayBGM( MAIN_BGM_NAME, m_isEnd, true );
 		m_isEnd = true;
 	};
 	BGMThread = std::thread( st );
@@ -62,7 +62,7 @@ void CGameScene::Update()
 {
 	if (CSoundManager::GetBGMVolme(MAIN_BGM_NAME) != -1) {
 		if (CSoundManager::GetBGMVolme(MAIN_BGM_NAME) != 1.0f) {
-			CSoundManager::FadeInBGMByName(MAIN_BGM_NAME);
+			CSoundManager::FadeInBGM(MAIN_BGM_NAME);
 		}
 	}
 	switch( m_enNowSceneState ){
@@ -138,11 +138,11 @@ void CGameScene::GameUpdate()
 	// サヤカが倒れる.
 	if( m_pSatage->isSayakaDead() ){
 		m_isEnd = true;
-		CSoundManager::StopBGMByName( MAIN_BGM_NAME );
+		CSoundManager::StopBGM( MAIN_BGM_NAME );
 		BGMThread.detach();
 		auto st = [&]()
 		{
-			CSoundManager::PlayBGMByName( OVER_BGM_NAME, m_isEnd, true );
+			CSoundManager::PlayBGM( OVER_BGM_NAME, m_isEnd, true );
 			if( InThreadID == BGMThread.get_id() ){
 
 			}
@@ -238,7 +238,7 @@ void CGameScene::PauseNextScene()
 		case CPauseUI::ToTitle:
 			// 次のシーンへ移動.
 			m_isEnd = true;
-			CSoundManager::StopBGMByName( MAIN_BGM_NAME );
+			CSoundManager::StopBGM( MAIN_BGM_NAME );
 			while( Release() == false ){}
 			m_pSceneManager->Swap( make_shared<CTitleScene>( m_pSceneManager ) );
 
@@ -259,10 +259,10 @@ void CGameScene::GameOverNextScene()
 			CPlaySEThread::SetSEName( "OK" );
 			// 次のシーンへ移動.
 			m_isEnd = true;
-			CSoundManager::StopBGMByName( OVER_BGM_NAME );
+			CSoundManager::StopBGM( OVER_BGM_NAME );
 			while (Release() == false) {}
 			BGMThread = std::thread( [&](){ 
-				CSoundManager::PlayBGMByName( MAIN_BGM_NAME, m_isEnd, true ); 
+				CSoundManager::PlayBGM( MAIN_BGM_NAME, m_isEnd, true ); 
 			} );
 			InThreadID = BGMThread.get_id();
 			//BGMをフェードインさせる為に、ボリュームを0に.
@@ -275,7 +275,7 @@ void CGameScene::GameOverNextScene()
 		case CGameOverUI::End:
 			CPlaySEThread::SetSEName( "OK" );
 			m_isEnd = true;
-			CSoundManager::StopBGMByName( OVER_BGM_NAME );
+			CSoundManager::StopBGM( OVER_BGM_NAME );
 			while( Release() == false ){}
 			m_pSceneManager->Swap( make_shared<CTitleScene>( m_pSceneManager ) );
 

@@ -22,12 +22,11 @@ CGameEndScene::CGameEndScene( shared_ptr<CSceneManager> sceneManager )
 {
 
 	CFadeUI::Init();
-	CSoundManager::InitALL();
 	CPlaySEThread::SetUpThread();
-	CSoundManager::StopSEByName( "OK" );
+	CSoundManager::StopSE( "OK" );
 	auto BGM = [&]()
 	{
-		CSoundManager::PlayBGMByName( "Title", m_isEnd, true );
+		CSoundManager::PlayBGM( "Title", m_isEnd, true );
 	};
 	BGMThread = std::thread( BGM );
 	InThreadID = BGMThread.get_id();
@@ -66,7 +65,7 @@ void CGameEndScene::Update()
 {
 	if( CSoundManager::GetBGMVolme( "Title" ) != -1 ){
 		if( CSoundManager::GetBGMVolme( "Title" ) != 1.0f && m_isNextScene == false ){
-			CSoundManager::FadeInBGMByName( "Title" );
+			CSoundManager::FadeInBGM( "Title" );
 		}
 		if( CSoundManager::GetBGMVolme( "Title" ) == 0.0f && m_isNextScene == true ){
 			m_isChangeScene = true;
@@ -86,7 +85,7 @@ void CGameEndScene::Update()
 	if( ( CXInput::IsPress( XINPUT_GAMEPAD_B ) ) ||
 		( GetAsyncKeyState( VK_RETURN ) & 0x0001 ) ){
 		CPlaySEThread::SetSEName( "OK" );
-		CSoundManager::FadeOutBGMByName( "Title" );
+		CSoundManager::FadeOutBGM( "Title" );
 		CFadeUI::FadeOUTStart();
 		m_isNextScene = true;
 	}

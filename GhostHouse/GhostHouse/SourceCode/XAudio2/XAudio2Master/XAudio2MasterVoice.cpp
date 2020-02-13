@@ -1,5 +1,5 @@
 #include "XAudio2.h"
-
+#include <iostream>
 #include "XAudio2MasterVoice.h"
 
 static bool OneCall = true;
@@ -18,6 +18,14 @@ clsXAudio2MasterVoice::clsXAudio2MasterVoice()
 clsXAudio2MasterVoice::~clsXAudio2MasterVoice()
 {
 }
+// インスタンスの作成.
+clsXAudio2MasterVoice* clsXAudio2MasterVoice::GetInstance()
+{
+	static std::unique_ptr<clsXAudio2MasterVoice> pInstance =
+		std::make_unique<clsXAudio2MasterVoice>();	// インスタンスの作成.
+	return pInstance.get();
+}
+
 
 // XAudio取得.
 IXAudio2* clsXAudio2MasterVoice::GetInterface()const

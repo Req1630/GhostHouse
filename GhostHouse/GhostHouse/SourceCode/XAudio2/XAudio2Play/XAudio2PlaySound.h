@@ -32,7 +32,7 @@ public:
 
 	// サウンド再生、前に一時停止されていた場合は記憶位置から再開.
 	virtual bool SEPlay(
-		const char* filename, bool& isEnd,bool& Reset, bool& IsPlay, bool& RePlaySE, bool& isEmergencyCall);
+		const char* filename, bool& isEnd, bool& Reset, bool& IsPlay, bool& RePlaySE, bool& isEmergencyCall);
 
 	// サウンド再生、前に一時停止されていた場合は記憶位置から再開.
 	virtual bool LoopPlay(const char* filename, bool& isEnd, bool& isEmergencyCall);
@@ -76,9 +76,9 @@ public:
 	// Reverb(反響エフェクト)の有効フラグを設定します.
 	bool UsingReverb(bool flag);
 	// BGMをフェードアウトする関数.
-	bool FadeOutBGM( float value, bool& isEmergencyCall );
+	bool FadeOutBGM(float value, bool& isEmergencyCall);
 	// BGMをフェードインする関数.
-	bool FadeInBGM( float value, bool& isEmergencyCall );
+	bool FadeInBGM(float value, bool& isEmergencyCall);
 	// 再生しているSoundSourceを停止する関数.
 	void StopSource();
 	// SoundSourceを破壊する関数.
@@ -114,6 +114,5 @@ protected:
 	bool					m_FadeInStart;	// フェードイン開始フラグ.
 
 };
-
 
 #endif // !C_XAUDIO2_PLAYSOUND_H

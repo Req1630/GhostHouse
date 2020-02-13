@@ -12,8 +12,8 @@ clsXAudio2PlaySound::clsXAudio2PlaySound()
 	m_maxPitch(1.4f),	//5.0fマックスかと思われます.
 	nextFirstSample(0),
 	submitCount(0),
-	m_FadeInStart( false ),
-	m_FadeOutStart( false )
+	m_FadeInStart(false),
+	m_FadeOutStart(false)
 {
 	SetVolume(1.0f);
 }
@@ -27,12 +27,12 @@ bool clsXAudio2PlaySound::Submit(std::shared_ptr<clsXAudio2WaveLoad> pWaveData, 
 {
 	nextFirstSample = 0;
 	submitCount = 0;
-	
+
 	// プライマリバッファ
 	m_Primary = std::vector< BYTE >(pWaveData->GetWaveFmtEx().nAvgBytesPerSec * 3);
 	if (nextFirstSample < m_pOriginData->GetSamples(filename))
 	{
-		std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, pWaveData->GetWaveFmtEx().nSamplesPerSec * 3, &(m_Primary[0]),filename);
+		std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, pWaveData->GetWaveFmtEx().nSamplesPerSec * 3, &(m_Primary[0]), filename);
 		if (readSamples > 0)
 		{
 			XAUDIO2_BUFFER bufferDesc = { 0 };
@@ -73,33 +73,27 @@ bool clsXAudio2PlaySound::Play(const char* filename, bool& isEnd, bool& isEmerge
 	while (1)
 	{
 		// 終了フラグ、緊急停止フラグが立っていればwhileループを抜ける.
-		if (isEnd == true || isEmergencyCall == true) {
-			break;
-		}
+		if (isEnd == true || isEmergencyCall == true) break;
 
 		XAUDIO2_VOICE_STATE state;
 		if (m_pSourceVoice == nullptr) break;
 		m_pSourceVoice->GetState(&state);
 		// すべて再生し終わっていたら中に入る.
 		if (state.BuffersQueued == 0 && nextFirstSample >= m_pOriginData->GetSamples(filename))
-		{		
+		{
 			break;
 		}
 		else if (state.BuffersQueued < 2 && nextFirstSample < m_pOriginData->GetSamples(filename))
 		{
 			// 終了フラグ、緊急停止フラグが立っていればwhileループを抜ける.
-			if (isEnd == true || isEmergencyCall == true) {
-				break;
-			}
+			if (isEnd == true || isEmergencyCall == true) break;
 			// キューにバッファを追加
 			std::vector< BYTE > & buffer = submitCount & 1 ? m_Secondary : m_Primary;
 			// サンプラーを読み込む.
-			std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, m_pOriginData->GetWaveFmtEx().nSamplesPerSec * 3, &(buffer[0]),filename);
+			std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, m_pOriginData->GetWaveFmtEx().nSamplesPerSec * 3, &(buffer[0]), filename);
 			if (readSamples > 0)
 			{
-				if (isEnd == true || isEmergencyCall == true) {
-					break;
-				}
+				if (isEnd == true || isEmergencyCall == true) break;
 				XAUDIO2_BUFFER bufferDesc = { 0 };
 				bufferDesc.Flags = nextFirstSample + readSamples >= m_pOriginData->GetSamples(filename) ? XAUDIO2_END_OF_STREAM : 0;
 				bufferDesc.AudioBytes = readSamples * m_pOriginData->GetWaveFmtEx().nBlockAlign;
@@ -111,7 +105,7 @@ bool clsXAudio2PlaySound::Play(const char* filename, bool& isEnd, bool& isEmerge
 				++submitCount;
 			}
 		}
-		
+
 		// 過負荷にならないよう調整
 		Sleep(1);
 	}
@@ -119,7 +113,7 @@ bool clsXAudio2PlaySound::Play(const char* filename, bool& isEnd, bool& isEmerge
 }
 
 bool clsXAudio2PlaySound::SEPlay(
-	const char * filename, bool & isEnd, bool& Reset, bool& IsPlay,bool& RePlaySE, bool& isEmergencyCall)
+	const char * filename, bool & isEnd, bool& Reset, bool& IsPlay, bool& RePlaySE, bool& isEmergencyCall)
 {
 	IsPlay = true;
 
@@ -142,8 +136,8 @@ bool clsXAudio2PlaySound::SEPlay(
 			break;
 		}
 		XAUDIO2_VOICE_STATE state;
-			if (m_pSourceVoice == nullptr) break;
-			m_pSourceVoice->GetState(&state);
+		if (m_pSourceVoice == nullptr) break;
+		m_pSourceVoice->GetState(&state);
 
 
 		if (state.BuffersQueued == 0 && nextFirstSample >= m_pOriginData->GetSamples(filename))
@@ -163,9 +157,7 @@ bool clsXAudio2PlaySound::SEPlay(
 			std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, m_pOriginData->GetWaveFmtEx().nSamplesPerSec * 3, &(buffer[0]), filename);
 			if (readSamples > 0)
 			{
-				if (isEnd == true || isEmergencyCall == true) {
-					break;
-				}
+				if (isEnd == true || isEmergencyCall == true) break;
 				XAUDIO2_BUFFER bufferDesc = { 0 };
 				bufferDesc.Flags = nextFirstSample + readSamples >= m_pOriginData->GetSamples(filename) ? XAUDIO2_END_OF_STREAM : 0;
 				bufferDesc.AudioBytes = readSamples * m_pOriginData->GetWaveFmtEx().nBlockAlign;
@@ -195,9 +187,7 @@ bool clsXAudio2PlaySound::LoopPlay(const char * filename, bool & isEnd, bool& is
 	m_pSourceVoice->Start(0);
 	while (1)
 	{
-		if (isEnd == true || isEmergencyCall == true) {
-			break;
-		}
+		if (isEnd == true || isEmergencyCall == true) break;
 
 		XAUDIO2_VOICE_STATE state;
 		if (isEnd != true || isEmergencyCall != true) {
@@ -218,18 +208,15 @@ bool clsXAudio2PlaySound::LoopPlay(const char * filename, bool & isEnd, bool& is
 		}
 		else if (state.BuffersQueued < 2 && nextFirstSample < m_pOriginData->GetSamples(filename))
 		{
-			if (isEnd == true || isEmergencyCall == true) {
-				break;
-			}
+			if (isEnd == true || isEmergencyCall == true) break;
 			// キューにバッファを追加
 			std::vector< BYTE > & buffer = submitCount & 1 ? m_Secondary : m_Primary;
 
 			std::size_t readSamples = m_pOriginData->ReadRaw(nextFirstSample, m_pOriginData->GetWaveFmtEx().nSamplesPerSec * 3, &(buffer[0]), filename);
 			if (readSamples > 0)
 			{
-				if (isEnd == true || isEmergencyCall == true) {
-					break;
-				}
+				if (isEnd == true || isEmergencyCall == true) break;
+
 				XAUDIO2_BUFFER bufferDesc = { 0 };
 				bufferDesc.Flags = nextFirstSample + readSamples >= m_pOriginData->GetSamples(filename) ? XAUDIO2_END_OF_STREAM : 0;
 				bufferDesc.AudioBytes = readSamples * m_pOriginData->GetWaveFmtEx().nBlockAlign;
@@ -245,12 +232,12 @@ bool clsXAudio2PlaySound::LoopPlay(const char * filename, bool & isEnd, bool& is
 		}
 		// フェードインフラグが立っていれば、フェードイン.
 		if (m_FadeInStart == true) {
-			FadeInBGM(FADE_VOLUME, isEmergencyCall );
+			FadeInBGM(FADE_VOLUME, isEmergencyCall);
 			m_FadeInStart = false;
 		}
 		// フェードアウトフラグが立っていれば、フェードイン.
-		if(m_FadeOutStart == true){
-			FadeOutBGM(-FADE_VOLUME, isEmergencyCall );
+		if (m_FadeOutStart == true) {
+			FadeOutBGM(-FADE_VOLUME, isEmergencyCall);
 			m_FadeOutStart = false;
 		}
 
@@ -266,57 +253,53 @@ bool clsXAudio2PlaySound::LoopPlay(const char * filename, bool & isEnd, bool& is
 //現ループでループ終了.
 bool clsXAudio2PlaySound::ExitLoop()
 {
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->ExitLoop();
-	}
-	else
-	{
-		return false;
-	}
+	if (m_pSourceVoice == nullptr) return false;
+
+	m_pSourceVoice->ExitLoop();
+
 	return true;
 }
 
 // サウンド完全停止.
 bool clsXAudio2PlaySound::Stop()
 {
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->Stop(0);
-		m_pSourceVoice->FlushSourceBuffers();
-		nextFirstSample = 0;
-	}
+	if (m_pSourceVoice == nullptr) return true;
+
+	m_pSourceVoice->Stop(0);
+	m_pSourceVoice->FlushSourceBuffers();
+	nextFirstSample = 0;
+	
 	return true;
 }
 
 // サウンド一時停止.
 bool clsXAudio2PlaySound::Pause()
 {
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->Stop(0);
-	}
+	if (m_pSourceVoice == nullptr) return true;
+
+	m_pSourceVoice->Stop(0);
+
 	return true;
 }
 
 // Wavファイルからデータを読み込む.
-bool clsXAudio2PlaySound::CreateSound(std::shared_ptr<clsXAudio2WaveLoad> pWaveData,const char* filename)
+bool clsXAudio2PlaySound::CreateSound(std::shared_ptr<clsXAudio2WaveLoad> pWaveData, const char* filename)
 {
 	//一回データが作られていたらリターン.
 	if (m_pOriginData != nullptr) return true;
 	m_pOriginData = pWaveData.get();
 
 	clsXAudio2MasterVoice& xAudioMaster = clsXAudio2MasterVoice::GetGlobalSystem();
-	
+
 	IXAudio2*   pHandle = xAudioMaster.GetInterface();
 
 	HRESULT hr = pHandle->CreateSourceVoice(&m_pSourceVoice,
-		&m_pOriginData->GetWaveFmtEx(),0,m_maxPitch,nullptr);
-	
+		&m_pOriginData->GetWaveFmtEx(), 0, m_maxPitch, nullptr);
+
 	if (FAILED(hr))
 		return false;
 
-	Submit(pWaveData,filename);
+	Submit(pWaveData, filename);
 
 	return true;
 }
@@ -326,10 +309,8 @@ float clsXAudio2PlaySound::GetVolume()const
 {
 	if (m_pSourceVoice == nullptr) return false;
 	float voluem = 0;
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->GetVolume(&voluem);
-	}
+
+	m_pSourceVoice->GetVolume(&voluem);
 
 	return voluem;
 }
@@ -337,13 +318,10 @@ float clsXAudio2PlaySound::GetVolume()const
 // 音量設定.
 bool  clsXAudio2PlaySound::SetVolume(float value)
 {
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->SetVolume(max(min(value, m_maxVolume), 0));
-		return true;
-	}
+	if (m_pSourceVoice == nullptr) return false;
 
-	return false;
+	m_pSourceVoice->SetVolume(max(min(value, m_maxVolume), 0));
+	return true;
 }
 
 // 最大音量設定.
@@ -355,20 +333,18 @@ void  clsXAudio2PlaySound::SetMaxVolume(float value)
 // 現在の音量から加算または減算.
 bool clsXAudio2PlaySound::AdjustVolume(float value)
 {
+	if (m_pSourceVoice == nullptr) return false;
+
 	return SetVolume(GetVolume() + value);
 }
 
 // ピッチを設定.
 bool clsXAudio2PlaySound::SetPitch(float value)
 {
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->SetFrequencyRatio(max(min(value, m_maxPitch), XAUDIO2_MIN_FREQ_RATIO));
-	}
-	else
-	{
-		return false;
-	}
+	if (m_pSourceVoice == nullptr) return false;
+
+	m_pSourceVoice->SetFrequencyRatio(max(min(value, m_maxPitch), XAUDIO2_MIN_FREQ_RATIO));
+
 	return true;
 }
 
@@ -376,10 +352,10 @@ bool clsXAudio2PlaySound::SetPitch(float value)
 float clsXAudio2PlaySound::GetPitch()const
 {
 	float pitch = XAUDIO2_MIN_FREQ_RATIO;
-	if (m_pSourceVoice)
-	{
-		m_pSourceVoice->GetFrequencyRatio(&pitch);
-	}
+	if (m_pSourceVoice == nullptr) return pitch;
+
+	m_pSourceVoice->GetFrequencyRatio(&pitch);
+
 	return pitch;
 }
 
@@ -395,29 +371,11 @@ void  clsXAudio2PlaySound::SetMaxPitch(float value)
 	m_maxPitch = max(min(value, 2.0f), XAUDIO2_MIN_FREQ_RATIO);
 }
 
-// リバーブ(残響)を使うかどうかフラグ設定.
-bool clsXAudio2PlaySound::UsingReverb(bool flag)
-{
-	if (m_pSourceVoice)
-	{
-		if (flag)
-			m_pSourceVoice->EnableEffect(0);
-		else
-			m_pSourceVoice->DisableEffect(0);
-	}
-	else
-	{
-		return false;
-	}
-
-	return true;
-}
-
-bool clsXAudio2PlaySound::FadeOutBGM(float value, bool& isEmergencyCall )
+bool clsXAudio2PlaySound::FadeOutBGM(float value, bool& isEmergencyCall)
 {
 	while (GetVolume() > 0.0f)
 	{
-		if( isEmergencyCall == true ) return true;
+		if (isEmergencyCall == true) return true;
 
 		AdjustVolume(value);
 		Sleep(1);
@@ -426,11 +384,11 @@ bool clsXAudio2PlaySound::FadeOutBGM(float value, bool& isEmergencyCall )
 	return true;
 }
 
-bool clsXAudio2PlaySound::FadeInBGM(float value, bool& isEmergencyCall )
+bool clsXAudio2PlaySound::FadeInBGM(float value, bool& isEmergencyCall)
 {
 	while (GetVolume() < 1.0f)
 	{
-		if( isEmergencyCall == true ) return true;
+		if (isEmergencyCall == true) return true;
 
 		AdjustVolume(value);
 		Sleep(1);
@@ -441,30 +399,29 @@ bool clsXAudio2PlaySound::FadeInBGM(float value, bool& isEmergencyCall )
 
 void clsXAudio2PlaySound::StopSource()
 {
-	if (m_pSourceVoice != nullptr)
-	{
-		m_pSourceVoice->FlushSourceBuffers();
+	if (m_pSourceVoice == nullptr) return;
 
-		XAUDIO2_VOICE_STATE xState;
+	m_pSourceVoice->FlushSourceBuffers();
+
+	XAUDIO2_VOICE_STATE xState;
+	m_pSourceVoice->GetState(&xState);
+	if (IsPlaying() == true) {
+		Stop();
+		xState.BuffersQueued = 0;
+	}
+	while (xState.BuffersQueued != 0)
+	{
 		m_pSourceVoice->GetState(&xState);
-		if (IsPlaying() == true) {
-			Stop();
-			xState.BuffersQueued = 0;
-		}
-		while (xState.BuffersQueued != 0)
-		{
-			m_pSourceVoice->GetState(&xState);
-			Sleep(5);
-		}
+		Sleep(5);
+	}
 	m_pSourceVoice->DestroyVoice();
 	m_pSourceVoice = nullptr;
-	}
 }
 
 void clsXAudio2PlaySound::DestoroySource()
 {
-	if (m_pSourceVoice != nullptr) {
-		m_pSourceVoice->DestroyVoice();
-		m_pSourceVoice = nullptr;
-	}
+	if (m_pSourceVoice == nullptr) return;
+
+	m_pSourceVoice->DestroyVoice();
+	m_pSourceVoice = nullptr;
 }

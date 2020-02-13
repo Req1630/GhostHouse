@@ -3,13 +3,16 @@
 #include <process.h>
 #include <thread>
 #include <Windows.h>
-#include "..\SingletonBase\SingletonBase.h"
 
-class CPlaySEThread : public std::CSingletonBase<CPlaySEThread>
+class CPlaySEThread
 {
 public:
 	CPlaySEThread();
 	~CPlaySEThread();
+
+	// インスタンスの取得.
+	static CPlaySEThread* GetInstance();
+
 	// スレッドを立ち上げる関数(一回のみ).
 	static void SetUpThread();
 	// アップデート関数.
@@ -65,16 +68,12 @@ private:
 	bool m_bReleaseOK_1;			// スレッド1の開放が安全にできるかどうかのフラグ.
 	bool m_bReleaseOK_2;			// スレッド2の開放が安全にできるかどうかのフラグ.
 	bool m_bReleaseOK_3;			// スレッド3の開放が安全にできるかどうかのフラグ.
+private:
+	// コピー・ムーブコンストラクタ, 代入演算子の削除.
+	CPlaySEThread(const CPlaySEThread &) = delete;
+	CPlaySEThread& operator = (const CPlaySEThread &) = delete;
+	CPlaySEThread(CPlaySEThread &&) = delete;
+	CPlaySEThread& operator = (CPlaySEThread &&) = delete;
 };
 
-
-
-
-
-
-
-
-
 #endif // !C_PLAYSE_THREAD_H
-
-

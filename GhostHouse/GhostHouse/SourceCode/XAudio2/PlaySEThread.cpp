@@ -1,31 +1,39 @@
 #include "PlaySEThread.h"
 #include "SoundManager.h"
 CPlaySEThread::CPlaySEThread()
-	: m_isEnd			( false )
-	, m_ChangeSE		( false )
-	, m_ChangeSE2		( false )
-	, m_ChangeSE3		( false )
-	, m_bIsPlay			( false )
-	, m_bIsPlay2		( false )
-	, m_bIsPlay3		( false )
-	, m_bReplaySE		( false )
-	, m_bReplaySE2		( false )
-	, m_bReplaySE3		( false )
-	, m_sSEName			("")
-	, m_sSEName2		("")
-	, m_sSEName3		("")
-	, m_bFristCreate	( true )
-{	 
+	: m_isEnd(false)
+	, m_ChangeSE(false)
+	, m_ChangeSE2(false)
+	, m_ChangeSE3(false)
+	, m_bIsPlay(false)
+	, m_bIsPlay2(false)
+	, m_bIsPlay3(false)
+	, m_bReplaySE(false)
+	, m_bReplaySE2(false)
+	, m_bReplaySE3(false)
+	, m_sSEName("")
+	, m_sSEName2("")
+	, m_sSEName3("")
+	, m_bFristCreate(true)
+{
 	m_dThreadExitCode_1 = -1;
 	m_dThreadExitCode_2 = -1;
 	m_dThreadExitCode_3 = -1;
-	m_bReleaseOK_1		= false;
-	m_bReleaseOK_2		= false;
-	m_bReleaseOK_3		= false;
+	m_bReleaseOK_1 = false;
+	m_bReleaseOK_2 = false;
+	m_bReleaseOK_3 = false;
 }
 
 CPlaySEThread::~CPlaySEThread()
 {
+
+}
+// インスタンスの作成.
+CPlaySEThread* CPlaySEThread::GetInstance()
+{
+	static std::unique_ptr<CPlaySEThread> pInstance =
+		std::make_unique<CPlaySEThread>();	// インスタンスの作成.
+	return pInstance.get();
 }
 
 void CPlaySEThread::SetUpThread()
@@ -35,29 +43,29 @@ void CPlaySEThread::SetUpThread()
 		// ラムダにSEを再生するための関数を入れる.
 		auto SE1 = [&]()
 		{
-			CSoundManager::PlaySEByName(
+			CSoundManager::PlaySE(
 				GetInstance()->m_sSEName, GetInstance()->m_isEnd, GetInstance()->m_ChangeSE,
-				false, GetInstance()->m_bIsPlay, GetInstance()->m_bReplaySE);
+					GetInstance()->m_bIsPlay, GetInstance()->m_bReplaySE);
 		};
 		GetInstance()->SEThread = std::thread(SE1);						// SE再生用スレッド1作成.
 		GetInstance()->InSEThreadID = GetInstance()->SEThread.get_id();	// スレッド1のスレッドID退避.
 		auto SE2 = [&]()
 		{
-			CSoundManager::PlaySEByName(
+			CSoundManager::PlaySE(
 				GetInstance()->m_sSEName2, GetInstance()->m_isEnd, GetInstance()->m_ChangeSE2,
-				false, GetInstance()->m_bIsPlay2, GetInstance()->m_bReplaySE2);
+					GetInstance()->m_bIsPlay2, GetInstance()->m_bReplaySE2);
 		};
 		GetInstance()->SEThread2 = std::thread(SE2);						// SE再生用スレッド2作成.
 		GetInstance()->InSEThreadID2 = GetInstance()->SEThread2.get_id();	// スレッド2のスレッドID退避.
 		auto SE3 = [&]()
 		{
-			CSoundManager::PlaySEByName(
+			CSoundManager::PlaySE(
 				GetInstance()->m_sSEName3, GetInstance()->m_isEnd, GetInstance()->m_ChangeSE3,
-				false, GetInstance()->m_bIsPlay3, GetInstance()->m_bReplaySE3);
+					GetInstance()->m_bIsPlay3, GetInstance()->m_bReplaySE3);
 		};
 		GetInstance()->SEThread3 = std::thread(SE3);						// SE再生用スレッド3作成.
 		GetInstance()->InSEThreadID3 = GetInstance()->SEThread3.get_id();	// スレッド3のスレッドID退避.
-		
+
 		// 1回だけ呼ぶためのフラグを下す.
 		GetInstance()->m_bFristCreate = false;
 	}
@@ -126,13 +134,12 @@ bool CPlaySEThread::Release()
 	// スレッド1がまだ開放されていない場合中に入る.
 	while (GetInstance()->m_bReleaseOK_1 == false)
 	{
-		
+
 		GetExitCodeThread(GetInstance()->SEThread.native_handle(), &GetInstance()->m_dThreadExitCode_1);
 		// スレッド1から帰ってくるhandleが0だったら、そのスレッドは安全に開放できるので中に入る.
 		if (GetInstance()->m_dThreadExitCode_1 == 0) {
 			// スレッドを作成した際に退避したIDと現在のIDが同じなら中に入る.
-			if (GetInstance()->InSEThreadID == GetInstance()->SEThread.get_id()) {		
-				CSoundManager::Clean();					// SEのSoundSourceをクリーン.
+			if (GetInstance()->InSEThreadID == GetInstance()->SEThread.get_id()) {
 				GetInstance()->SEThread.detach();		// スレッドをデタッチ.
 				GetInstance()->m_bReleaseOK_1 = true;	// スレッド1の開放が終わったことを示す.
 			}
@@ -157,7 +164,7 @@ bool CPlaySEThread::Release()
 	{
 		GetExitCodeThread(GetInstance()->SEThread3.native_handle(), &GetInstance()->m_dThreadExitCode_3);
 		if (GetInstance()->m_dThreadExitCode_3 == 0) {
-			if (GetInstance()->InSEThreadID3 == GetInstance()->SEThread3.get_id()) {							
+			if (GetInstance()->InSEThreadID3 == GetInstance()->SEThread3.get_id()) {
 				GetInstance()->SEThread3.detach();
 				GetInstance()->m_bReleaseOK_3 = true;
 			}

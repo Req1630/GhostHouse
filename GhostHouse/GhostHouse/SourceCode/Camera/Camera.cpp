@@ -30,12 +30,12 @@ CCamera::CCamera()
 	Camera.m_Degree_y = 2.0f;
 	CameraRotationToRadian = 0.0f;
 	Camera.m_vPos.x = 0.0f;
-	Camera.m_vPos.y = 5.0f;
+	Camera.m_vPos.y = 1.0f;
 	Camera.m_vPos.z = 0.0f;
 
 	stCamera.fDegree = 0.0f;
-	stCamera.fLength = 18.0f;
-	stCamera.Pos = D3DXVECTOR3( 0.0f, 10.0f, 0.0f );
+	stCamera.fLength = 9.0f;
+	stCamera.Pos = D3DXVECTOR3( 0.0f, 5.0f, 0.0f );
 	stCamera.vRot = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	stCamera.InvisibleCenter = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 }
@@ -130,6 +130,8 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 			m_vGimmickPosition = vInvisibleCenPos;	// 見えない床の中心座標取得.
 			// カメラの座標と見えない床の中心座標の距離を取得.
 			m_fInvGimmickDistance = GetTwoDistance( stCamera.Pos, m_vGimmickPosition );
+			// カメラが戻った際に進行方向にカメラが向くように角度を変更.
+			stCamera.fDegree = D3DXToDegree(GetTwoRadian(stCamera.Pos, m_vGimmickPosition));
 			// カメラの座標と見えない床の中心座標の角度を取得.
 			m_fInvGimmickRadian = GetTwoRadian( stCamera.Pos, m_vGimmickPosition );
 			// 距離が指定値より大きい間中に入る.
@@ -141,6 +143,8 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 			} else {
 				// 距離は十分なのでステップを進める.
 				m_Step++;
+				// 上で設定した奴を180度回す
+				stCamera.fDegree += 180.0f;
 			}
 			CameraRotationToRadian = m_fInvGimmickRadian;
 			// カメラの座標更新.
@@ -152,6 +156,7 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 			m_vGimmickPosition = vInvisibleCenPos;
 			m_fInvGimmickDistance = GetTwoDistance( stCamera.Pos, m_vGimmickPosition );
 			m_fInvGimmickRadian = GetTwoRadian( stCamera.Pos, m_vGimmickPosition );
+			
 			Oneflow = false;
 			CameraRotationToRadian = m_fInvGimmickRadian;
 			m_vCamera = { stCamera.Pos.x, stCamera.Pos.y + CAMERA_UP_DISTANCE, stCamera.Pos.z };
@@ -244,26 +249,26 @@ D3DXVECTOR3 CCamera::EditMoveCameraPos( const D3DXVECTOR3& vCenPos )
 
 void CCamera::RayColl( shared_ptr<CObjectBase> pObj )
 {
-	if( pObj->GetObjectNo() == enObjectNo::Ground ) return;
-	float fDistance;
-	D3DXVECTOR3 vIntersect;
-	D3DXVECTOR3 vEndPos;
-	D3DXVECTOR3 vCameraPos = stCamera.Pos;
-	D3DXVECTOR3 vLookPos = D3DXVECTOR3( Camera.m_CenterX, Camera.m_CenterY, Camera.m_CenterZ );
-	m_pCollRay->SetRay( vLookPos );
+	//if( pObj->GetObjectNo() == enObjectNo::Ground ) return;
+	//float fDistance;
+	//D3DXVECTOR3 vIntersect;
+	//D3DXVECTOR3 vEndPos;
+	//D3DXVECTOR3 vCameraPos = stCamera.Pos;
+	//D3DXVECTOR3 vLookPos = D3DXVECTOR3( Camera.m_CenterX, Camera.m_CenterY, Camera.m_CenterZ );
+	//m_pCollRay->SetRay( vLookPos );
 
-	float range = -0.5f;
-	for( int i = 0; i < 50; i++ ){
-		vCameraPos.x =
-			Camera.m_CenterX + ( sinf( CameraRotationToRadian + range ) * 18.0f );
-		vCameraPos.z =
-			Camera.m_CenterZ + ( cosf( CameraRotationToRadian + range ) * 18.0f );
+	//float range = -0.5f;
+	//for( int i = 0; i < 50; i++ ){
+	//	vCameraPos.x =
+	//		Camera.m_CenterX + ( sinf( CameraRotationToRadian + range ) * 18.0f );
+	//	vCameraPos.z =
+	//		Camera.m_CenterZ + ( cosf( CameraRotationToRadian + range ) * 18.0f );
 
-		if( m_pCollRay->Intersect( pObj, &fDistance, &vIntersect, vCameraPos ) == true ){
-			pObj->SetAlpha( 0.51f );
-		}
-		range += 0.02f;
-	}
+	//	if( m_pCollRay->Intersect( pObj, &fDistance, &vIntersect, vCameraPos ) == true ){
+	//		pObj->SetAlpha( 0.51f );
+	//	}
+	//	range += 0.02f;
+	//}
 }
 
 
