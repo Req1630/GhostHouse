@@ -75,7 +75,7 @@ void CEditImGui::ManipulationDescriptionRender( bool& isEditEnd )
 	textDraw( "Move Down Object -- ", "LB",		ImVec4( 0.8f, 0.5f, 0.5f, 1.0f ) );
 	textDraw( "Object Wire Draw -- ", "RIGHT STICK BUTTON", ImVec4( 0.8f, 0.5f, 0.5f, 1.0f ) );
 	ImGui::Separator();
-	textDraw( "Edit End ---------- ", "Start", ImVec4( 0.8f, 0.5f, 0.5f, 1.0f ) );
+	textDraw( "Edit End ---------- ", "LEFT STICK BUTTON", ImVec4( 0.8f, 0.5f, 0.5f, 1.0f ) );
 	ImGui::Separator();
 
 	ImGui::End();

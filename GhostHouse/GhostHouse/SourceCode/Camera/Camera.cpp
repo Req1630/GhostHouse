@@ -34,8 +34,8 @@ CCamera::CCamera()
 	Camera.m_vPos.z = 0.0f;
 
 	stCamera.fDegree = 0.0f;
-	stCamera.fLength = 9.0f;
-	stCamera.Pos = D3DXVECTOR3( 0.0f, 5.0f, 0.0f );
+	stCamera.fLength = 18.0f;
+	stCamera.Pos = D3DXVECTOR3( 0.0f, 10.0f, 0.0f );
 	stCamera.vRot = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	stCamera.InvisibleCenter = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 }
@@ -249,26 +249,26 @@ D3DXVECTOR3 CCamera::EditMoveCameraPos( const D3DXVECTOR3& vCenPos )
 
 void CCamera::RayColl( shared_ptr<CObjectBase> pObj )
 {
-	//if( pObj->GetObjectNo() == enObjectNo::Ground ) return;
-	//float fDistance;
-	//D3DXVECTOR3 vIntersect;
-	//D3DXVECTOR3 vEndPos;
-	//D3DXVECTOR3 vCameraPos = stCamera.Pos;
-	//D3DXVECTOR3 vLookPos = D3DXVECTOR3( Camera.m_CenterX, Camera.m_CenterY, Camera.m_CenterZ );
-	//m_pCollRay->SetRay( vLookPos );
+	if( pObj->GetObjectNo() == enObjectNo::Ground ) return;
+	float fDistance;
+	D3DXVECTOR3 vIntersect;
+	D3DXVECTOR3 vEndPos;
+	D3DXVECTOR3 vCameraPos = stCamera.Pos;
+	D3DXVECTOR3 vLookPos = D3DXVECTOR3( Camera.m_CenterX, Camera.m_CenterY, Camera.m_CenterZ );
+	m_pCollRay->SetRay( vLookPos );
 
-	//float range = -0.5f;
-	//for( int i = 0; i < 50; i++ ){
-	//	vCameraPos.x =
-	//		Camera.m_CenterX + ( sinf( CameraRotationToRadian + range ) * 18.0f );
-	//	vCameraPos.z =
-	//		Camera.m_CenterZ + ( cosf( CameraRotationToRadian + range ) * 18.0f );
+	float range = -0.5f;
+	for( int i = 0; i < 50; i++ ){
+		vCameraPos.x =
+			Camera.m_CenterX + ( sinf( CameraRotationToRadian + range ) * 18.0f );
+		vCameraPos.z =
+			Camera.m_CenterZ + ( cosf( CameraRotationToRadian + range ) * 18.0f );
 
-	//	if( m_pCollRay->Intersect( pObj, &fDistance, &vIntersect, vCameraPos ) == true ){
-	//		pObj->SetAlpha( 0.51f );
-	//	}
-	//	range += 0.02f;
-	//}
+		if( m_pCollRay->Intersect( pObj, &fDistance, &vIntersect, vCameraPos ) == true ){
+			pObj->SetAlpha( 0.51f );
+		}
+		range += 0.02f;
+	}
 }
 
 

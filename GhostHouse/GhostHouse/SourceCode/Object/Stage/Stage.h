@@ -26,7 +26,7 @@ public:
 		Max,
 	};
 
-	const float WINDOW_OUT_SIZE = 200.0f;
+	const float WINDOW_OUT_SIZE = 500.0f;
 public:
 	CStage();
 	~CStage();
