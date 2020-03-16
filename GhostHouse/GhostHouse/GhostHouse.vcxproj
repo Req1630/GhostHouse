@@ -163,6 +163,7 @@
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\ObjectBase\MapBase\EventBoxBase\EventBoxBase.h" />
     <ClInclude Include="SourceCode\ObjectBase\MapBase\MapBase.h" />
+    <ClInclude Include="SourceCode\ObjectBase\ObjectList.h" />
     <ClInclude Include="SourceCode\Object\Character\Ghost\BigGhost\BigGhost.h" />
     <ClInclude Include="SourceCode\Object\Character\Ghost\GhostA\GhostA.h" />
     <ClInclude Include="SourceCode\Object\Character\Ghost\GhostB\GhostB.h" />

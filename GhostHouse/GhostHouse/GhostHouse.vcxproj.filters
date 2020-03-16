@@ -330,6 +330,9 @@
     <ClInclude Include="SourceCode\Object\Map\InvisibleWall.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\ObjectBase\ObjectList.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Main\Main.cpp">
