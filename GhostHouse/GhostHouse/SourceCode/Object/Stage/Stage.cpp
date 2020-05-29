@@ -61,7 +61,7 @@ void CStage::Updata()
 	if (m_pPlayerManager->GetSayaka() == nullptr) return;
 	if (m_bStartGame == true) {
 		if (m_bOneCall == true) {
-			for (size_t i = 0; i <= m_MapSize; i++) {
+			for (int i = 0; i <= m_MapSize; i++) {
 				m_OldTextNum.emplace_back();
 				InitTextNum(i);
 			}

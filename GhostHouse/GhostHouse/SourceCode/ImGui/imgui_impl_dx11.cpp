@@ -28,6 +28,9 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 
+// 警告についてのコード分析を無効にする 4005:再定義.
+#pragma warning( disable:4005 )
+
 // DirectX
 #include <stdio.h>
 #include <d3d11.h>
@@ -35,6 +38,7 @@
 #ifdef _MSC_VER
 #pragma comment(lib, "d3dcompiler") // Automatically link with d3dcompiler.lib as we are using D3DCompile() below.
 #endif
+
 
 // DirectX data
 static ID3D11Device*            g_pd3dDevice = NULL;

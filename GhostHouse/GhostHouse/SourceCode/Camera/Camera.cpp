@@ -131,7 +131,7 @@ D3DXVECTOR3 CCamera::GimmickUpCamera( const D3DXVECTOR3& vInvisibleCenPos, const
 			// カメラの座標と見えない床の中心座標の距離を取得.
 			m_fInvGimmickDistance = GetTwoDistance( stCamera.Pos, m_vGimmickPosition );
 			// カメラが戻った際に進行方向にカメラが向くように角度を変更.
-			stCamera.fDegree = D3DXToDegree(GetTwoRadian(stCamera.Pos, m_vGimmickPosition));
+			stCamera.fDegree = static_cast<float>(D3DXToDegree(GetTwoRadian(stCamera.Pos, m_vGimmickPosition)));
 			// カメラの座標と見えない床の中心座標の角度を取得.
 			m_fInvGimmickRadian = GetTwoRadian( stCamera.Pos, m_vGimmickPosition );
 			// 距離が指定値より大きい間中に入る.
